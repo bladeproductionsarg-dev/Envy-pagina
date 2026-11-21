@@ -1,0 +1,9 @@
+{
+  "name": "envy-static-store",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "check": "node --check app.js && node --check scripts/build.mjs",
+    "build": "node scripts/build.mjs"
+  }
+}

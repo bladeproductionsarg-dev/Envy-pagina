@@ -18,4 +18,14 @@ El formulario postal no cotiza tarifas: orienta a confirmar cobertura y precio e
 Antes de publicar: confirmar precio, características, compatibilidad, garantía, devoluciones, contacto y datos comerciales. No se afirma que sea un Apple AirTag, ni que tenga GPS en tiempo real. La demostración es ilustrativa.
 
 ## Publicación
-Se puede alojar esta carpeta como sitio estático y conectar un dominio propio. Este entregable está guardado localmente; no fue subido a GitHub ni publicado. El proyecto React anterior permanece intacto en Documentos/ChatGPT/Envy/envy-store.
+Sitio publicado: https://envy-smart-living.honeypixie514.chatgpt.site
+
+El código actual está en esta carpeta y tiene historial Git local. Todavía no hay repositorio conectado en GitHub. El proyecto React anterior permanece intacto en Documentos/ChatGPT/Envy/envy-store; no es el proyecto publicado actual.
+
+## Trabajar con otras IAs
+
+Abrir esta carpeta completa en la herramienta elegida. Leer primero `AGENTS.md` y `COLABORACION.md`. Claude y Gemini tienen puntos de entrada `CLAUDE.md` y `GEMINI.md`. Las herramientas que no pueden editar carpetas pueden recibir el ZIP del proyecto.
+
+Con Node.js instalado, `npm run check` valida JavaScript y `npm run build` prepara `dist/` sin descargar dependencias. Nunca editar dist directamente.
+
+Los cambios locales o futuros commits en GitHub NO actualizan automáticamente la web publicada. Para actualizar la dirección actual, usar la integración Sites y el proyecto identificado en `.openai/hosting.json`. Se puede migrar a otro hosting estático sin reescribir la web.

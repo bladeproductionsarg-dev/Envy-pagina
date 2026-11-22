@@ -20,7 +20,7 @@ Antes de publicar: confirmar precio, características, compatibilidad, garantía
 ## Publicación
 Sitio publicado: https://envy-smart-living.honeypixie514.chatgpt.site
 
-El código actual está en esta carpeta y tiene historial Git local. Todavía no hay repositorio conectado en GitHub. El proyecto React anterior permanece intacto en Documentos/ChatGPT/Envy/envy-store; no es el proyecto publicado actual.
+El código actual está en esta carpeta y sincronizado con [GitHub: bladeproductionsarg-dev/Envy-pagina](https://github.com/bladeproductionsarg-dev/Envy-pagina). El repositorio es público, según la configuración que eligió el propietario al crearlo. El proyecto React anterior permanece intacto en Documentos/ChatGPT/Envy/envy-store; no es el proyecto publicado actual.
 
 ## Trabajar con otras IAs
 

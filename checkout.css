@@ -1,0 +1,265 @@
+.checkout-header {
+  height: 72px;
+  min-height: 0;
+  flex-wrap: nowrap;
+  padding: 0 max(5%, calc((100% - 1120px) / 2));
+}
+.checkout-header > a:last-child {
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.purchase {
+  max-width: 1190px;
+  margin: auto;
+  padding: clamp(25px, 5vw, 64px) 5% 70px;
+}
+.purchase h1 {
+  font-size: clamp(38px, 5vw, 66px);
+  margin-bottom: 30px;
+}
+.purchase h2,
+.purchase legend {
+  font-size: 24px;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  font-weight: 650;
+}
+.purchase h3 {
+  font-size: 21px;
+}
+.purchase-grid {
+  display: grid;
+  grid-template-columns: minmax(265px, 0.88fr) minmax(0, 1.25fr);
+  gap: clamp(18px, 4vw, 56px);
+  align-items: start;
+}
+.mode-note {
+  padding: 8px 14px;
+  background: #fff0de;
+  color: #593315;
+  border-left: 3px solid var(--orange);
+  margin-bottom: 18px;
+  font-size: 14px;
+}
+.order-summary,
+.order-form,
+.receipt,
+#unavailable {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: clamp(18px, 2.5vw, 32px);
+}
+.order-summary {
+  position: sticky;
+  top: 90px;
+}
+.line-item,
+.stepper,
+.choice,
+.rates div,
+.bill div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.line-item {
+  margin: 20px 0;
+}
+.line-item img {
+  border-radius: 9px;
+  width: 90px;
+  height: 90px;
+}
+.purchase label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+.stepper {
+  display: inline-flex;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  margin: 6px 0;
+}
+.stepper button,
+.stepper input {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  text-align: center;
+}
+.stepper input {
+  appearance: textfield;
+  font: inherit;
+  width: 52px;
+}
+.stepper input::-webkit-inner-spin-button {
+  appearance: none;
+}
+.stock,
+.rates,
+.bill {
+  font-size: 14px;
+}
+.rates {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+}
+.rates div,
+.bill div {
+  justify-content: space-between;
+}
+.rates dd,
+.bill dd {
+  margin: 0;
+}
+.rates .active {
+  color: var(--ink);
+  font-weight: bold;
+}
+.bill {
+  margin-bottom: 0;
+}
+.bill .grand {
+  margin-top: 14px;
+  font-weight: 700;
+  font-size: 22px;
+}
+.order-form fieldset {
+  padding: 0;
+  border: 0;
+  margin: 0 0 24px;
+  min-width: 0;
+}
+.order-form legend {
+  margin-bottom: 12px;
+}
+.purchase label.choice {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 10px 12px;
+  margin: 7px 0;
+  cursor: pointer;
+}
+.choice:has(:checked) {
+  border-color: var(--ink);
+  background: var(--paper);
+}
+.choice small {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.choice input {
+  accent-color: var(--navy);
+  width: 17px;
+  height: 17px;
+  flex: none;
+}
+.choice:has(:disabled) {
+  opacity: 0.65;
+  cursor: default;
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.purchase input:not([type="radio"]):not([type="number"]),
+.purchase select {
+  font: inherit;
+  display: block;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--ink);
+  padding: 10px;
+  margin: 5px 0 10px;
+}
+.back-link {
+  display: inline-block;
+  background: none;
+  border: 0;
+  color: var(--ink);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  margin: 14px 12px 0 0;
+  padding: 4px 0;
+}
+.purchase button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.purchase button.full {
+  margin-top: 2px;
+}
+.receipt {
+  max-width: 655px;
+}
+.receipt p,
+#review-panel p,
+#unavailable p {
+  margin: 15px 0;
+}
+.order-id strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+#transfer-info {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 16px;
+  border-radius: 8px;
+}
+#alias {
+  display: block;
+  font-size: 24px;
+}
+#error {
+  color: #9a311c;
+}
+.dark #error {
+  color: #ffaf91;
+}
+@media (max-width: 740px) {
+  .purchase-grid,
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+  .order-summary {
+    position: static;
+  }
+  .purchase h1 {
+    margin-bottom: 18px;
+  }
+  .line-item img {
+    width: 66px;
+    height: 66px;
+  }
+  .line-item {
+    margin: 12px 0;
+  }
+  .rates {
+    margin: 8px 0;
+  }
+  .field-grid {
+    gap: 0;
+  }
+  .checkout-header {
+    height: 64px;
+  }
+  .order-summary,
+  .order-form {
+    padding: 18px;
+  }
+}

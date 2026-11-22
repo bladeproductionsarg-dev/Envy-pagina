@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#070D18" />
+    <title>Finalizar compra | ENVY</title>
+    <link rel="icon" href="assets/logo.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="checkout.css" />
+    <script type="module" src="checkout.mjs"></script>
+  </head>
+  <body>
+    <header class="checkout-header">
+      <a class="brand" href="index.html"
+        ><img src="assets/logo-glow.webp" alt="" /><span>ENVY</span></a
+      ><a href="index.html#producto">Volver a la tienda</a>
+    </header>
+    <main class="purchase">
+      <p id="mode-note" class="mode-note" hidden>
+        Vista de prueba · Usá los datos de ejemplo. No envíes dinero.
+      </p>
+      <h1>Finalizar compra</h1>
+      <p id="loading" role="status">Buscando precio y disponibilidad…</p>
+      <div id="unavailable" hidden>
+        <h2>Compra directa no disponible</h2>
+        <p>Podés consultar el A Tag en la publicación del vendedor.</p>
+        <a
+          class="button"
+          href="https://articulo.mercadolibre.com.ar/MLA-2282184321"
+          >Ver en Mercado Libre</a
+        >
+      </div>
+      <div class="purchase-grid" id="purchase" hidden>
+        <aside class="order-summary">
+          <h2>Tu pedido</h2>
+          <div class="line-item">
+            <img
+              src="assets/a-tag-lifestyle.webp"
+              width="110"
+              height="110"
+              alt="A Tag con llavero y llave de ejemplo"
+            />
+            <div>
+              <h3>A Tag</h3>
+              <p>Localizador + llavero</p>
+            </div>
+          </div>
+          <label for="units">Cantidad</label>
+          <div class="stepper">
+            <button type="button" id="less" aria-label="Quitar una unidad">
+              −</button
+            ><input
+              id="units"
+              type="number"
+              min="1"
+              step="1"
+              value="1"
+              inputmode="numeric"
+              required
+            /><button type="button" id="more" aria-label="Sumar una unidad">
+              +
+            </button>
+          </div>
+          <p id="available" class="stock"></p>
+          <dl class="rates">
+            <div>
+              <dt>1 a 5 unidades</dt>
+              <dd>$20.000 c/u</dd>
+            </div>
+            <div>
+              <dt>6 a 14</dt>
+              <dd>$17.500 c/u</dd>
+            </div>
+            <div>
+              <dt>15 o más</dt>
+              <dd>$15.000 c/u</dd>
+            </div>
+          </dl>
+          <dl class="bill">
+            <div>
+              <dt>Precio por unidad</dt>
+              <dd id="unit"></dd>
+            </div>
+            <div>
+              <dt id="fee-label">Retiro</dt>
+              <dd>Gratis</dd>
+            </div>
+            <div class="grand">
+              <dt>Total en ARS</dt>
+              <dd id="amount" aria-live="polite"></dd>
+            </div>
+          </dl>
+        </aside>
+        <div class="order-form">
+          <form id="details">
+            <fieldset>
+              <legend>Entrega</legend>
+              <label class="choice"
+                ><input
+                  type="radio"
+                  name="delivery"
+                  value="pickup"
+                  checked
+                /><span
+                  ><b>Retiro en Santos Lugares</b
+                  ><small>Coordinamos el horario con vos.</small></span
+                ></label
+              >
+              <label class="choice"
+                ><input type="radio" name="delivery" value="delivery" /><span
+                  ><b>Envío gratis a domicilio</b
+                  ><small
+                    >Disponible en Ciudad Autónoma de Buenos Aires.</small
+                  ></span
+                ></label
+              >
+              <div id="shipping-fields" hidden>
+                <label>Zona de entrega<select name="zone"></select></label
+                ><label
+                  >Calle, número y departamento<input
+                    name="address"
+                    autocomplete="street-address"
+                    minlength="5"
+                    maxlength="240"
+                /></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Contacto</legend>
+              <div class="field-grid">
+                <label
+                  >Nombre y apellido<input
+                    name="name"
+                    autocomplete="name"
+                    minlength="2"
+                    maxlength="100"
+                    required /></label
+                ><label
+                  >Teléfono de contacto<input
+                    type="tel"
+                    name="phone"
+                    autocomplete="tel"
+                    minlength="6"
+                    maxlength="24"
+                    required
+                /></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Forma de pago</legend>
+              <label class="choice"
+                ><input type="radio" name="method" value="cash" checked /><span
+                  ><b>Al retirar o recibir</b
+                  ><small>Abonás cuando te entregamos el A Tag.</small></span
+                ></label
+              >
+              <label class="choice"
+                ><input type="radio" name="method" value="transfer" /><span
+                  ><b>Transferencia a Mercado Pago</b
+                  ><small
+                    >Vas a ver el alias y el importe después de confirmar el
+                    pedido.</small
+                  ></span
+                ></label
+              >
+              <label class="choice" id="card-choice"
+                ><input type="radio" name="method" value="card" /><span
+                  ><b>Tarjeta con Mercado Pago</b
+                  ><small id="card-note"
+                    >Ingresás la tarjeta en el formulario de Mercado Pago dentro
+                    de ENVY.</small
+                  ></span
+                ></label
+              >
+            </fieldset>
+            <button id="review" class="button full" type="submit">
+              Revisar pedido
+            </button>
+          </form>
+          <section id="review-panel" hidden aria-labelledby="review-title">
+            <h2 id="review-title" tabindex="-1">Revisá tu compra</h2>
+            <p id="review-copy"></p>
+            <p id="review-contact"></p>
+            <p id="review-method"></p>
+            <div id="card-brick"></div>
+            <button id="confirm" class="button full"></button>
+            <button type="button" id="edit" class="back-link">
+              Modificar pedido
+            </button>
+          </section>
+          <p id="error" role="alert"></p>
+        </div>
+      </div>
+      <section id="receipt" class="receipt" hidden>
+        <h2 id="result-title" tabindex="-1"></h2>
+        <p id="result-copy"></p>
+        <p id="result-total"></p>
+        <div id="transfer-info" hidden>
+          <span>Alias de Mercado Pago</span><strong id="alias"></strong
+          ><button class="back-link" id="copy-alias">Copiar alias</button>
+        </div>
+        <p class="order-id">
+          Número de pedido <strong id="reference"></strong>
+        </p>
+        <button class="button" id="refresh" hidden>Consultar estado</button>
+        <a class="back-link" href="index.html">Volver a ENVY</a
+        ><button class="back-link" id="another">Empezar otra compra</button>
+      </section>
+      <noscript
+        >Activá JavaScript para usar el carrito.
+        <a href="https://articulo.mercadolibre.com.ar/MLA-2282184321"
+          >Ver A Tag en Mercado Libre</a
+        >.</noscript
+      >
+    </main>
+  </body>
+</html>

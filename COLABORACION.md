@@ -22,5 +22,6 @@ Esta carpeta, `Envy-web`, contiene la web actual. El dueño usa Escritorio/Envy 
 ## Actualización de la web publicada
 El alojamiento actual es Sites. Una herramienta con acceso autorizado debe leer `.openai/hosting.json`, obtener credenciales temporales desde la integración, sincronizar la fuente exacta, ejecutar el build, empaquetar dist junto con el manifiesto y publicar una versión guardada del mismo proyecto. No guardar credenciales en archivos. Conservar acceso público salvo que el dueño pida cambiarlo. Si otra IA no tiene la integración, puede editar y entregar el código para que Codex lo publique.
 
-## Pendientes reales
-Repositorio compartido: https://github.com/bladeproductionsarg-dev/Envy-pagina. GitHub lo muestra como público. Falta dominio propio, backend de pedidos/inventario, integración de pagos propia y tarifas de entrega. Confirmar datos comerciales y del dispositivo antes de prometerlos. La entrega se informa como retiro en Santos Lugares o entrega a domicilio a coordinar. La demostración es ilustrativa. El checkout actual es un enlace a Mercado Libre y no transfiere la cantidad seleccionada.
+## Venta directa y publicación
+
+El servidor de venta directa, inventario y pedidos está en `server.mjs`. Para probar o gestionar pagos ver README.md. El despliegue estático de Sites conserva el enlace a Mercado Libre. La venta directa pública requiere un servidor Node con almacenamiento privado y HTTPS. Falta configurar la cuenta para tarjetas, definir las demás localidades de envío gratuito y publicar el servicio.

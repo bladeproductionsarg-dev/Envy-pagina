@@ -10,12 +10,20 @@ Abrir `index.html` directamente en un navegador. No necesita instalación ni com
 
 El logo iluminado conserva la imagen aportada por el propietario. Su entrada utiliza revelado y cambio de luminosidad de la imagen completa, no un trazado vectorial ni control independiente de segmentos. El movimiento reducido desactiva las animaciones.
 
-## Comercio
-El precio de $20.000 por unidad es una referencia anterior del propietario. Los grupos de 2 y 4 no tienen descuentos ni stock independiente. El máximo de 20 unidades es un límite de interfaz, no inventario. El carrito persiste en este navegador y no crea pedidos ni reserva productos. Al continuar en Mercado Libre, hay que elegir nuevamente la cantidad. No se transfieren líneas de carrito.
+## Venta directa
 
-La portada enlaza directamente a la publicación y muestra el precio de referencia definido en app.js. La entrega se informa como retiro en Santos Lugares o entrega a domicilio a coordinar. El costo y la cobertura dependen de lo que acuerde el comprador. No hay cobro integrado, WhatsApp configurado, gestión de stock ni backend. Para habilitar Mercado Pago se necesita un servidor, credenciales privadas y validación de pagos con webhooks. Nunca poner secretos en app.js.
+Con Node 24 o superior, ejecutar `npm ci`, `npm run build` y `npm start`. El servidor abre en http://127.0.0.1:5177. El modo predeterminado es de prueba. Usa pedidos y stock separados, datos ficticios y pagos simulados.
 
-Antes de publicar: confirmar precio, características, compatibilidad, garantía, devoluciones, contacto y datos comerciales. No se afirma que sea un Apple AirTag, ni que tenga GPS en tiempo real. La demostración es ilustrativa.
+La venta directa comienza con 40 unidades. El precio del pedido completo depende de la cantidad: 1–5 a $20.000 por unidad, 6–14 a $17.500 y 15 o más a $15.000. El catálogo está en `catalog.mjs`. Retiro en Santos Lugares y entrega gratuita en CABA. La zona de envío se valida en el servidor. Las localidades del conurbano quedan pendientes de confirmación.
+
+El comprador elige la cantidad, entrega y medio de pago en `checkout.html`. El servidor verifica precios y disponibilidad antes de registrar el pedido y descontar inventario en una única transacción. Un reintento con la misma referencia devuelve el pedido existente. El número de pedido permite recuperar el estado mediante el enlace de confirmación. La consulta pública omite los datos de contacto.
+
+### Activar y gestionar
+
+- Para ventas reales, ejecutar el proceso con `ENVY_MODE=live`. Transferencias al alias **felipillo.com.ar** y pago al recibir están habilitados en ese modo. Los pedidos por transferencia quedan pendientes de verificación.
+- Para tarjetas, configurar `MP_PUBLIC_KEY` y `MP_ACCESS_TOKEN` en el entorno del servidor. Usar credenciales de prueba con una base separada para la homologación del vendedor antes de habilitar tarjetas en producción. El formulario integrado usa Card Payment Brick. El token privado queda en el servidor. Cada pago usa la referencia del pedido como clave de idempotencia. El servidor consulta a Mercado Pago para reconciliar los pagos pendientes, incluso tras un reinicio. Revisar un pedido que permanezca pendiente antes de intentar cobrarlo nuevamente. [Documentación de Mercado Pago](https://www.mercadopago.com.ar/developers/es/docs/checkout-bricks/card-payment-brick/payment-submission)
+- El proceso necesita un servidor Node de ejecución continua con HTTPS y disco persistente. `HOST` y `PORT` controlan la escucha. `ENVY_DATA_DIR` indica el directorio privado de datos (predeterminado: .envy-store en el directorio personal). Hacer copia de seguridad de SQLite. El alojamiento estático actual sirve el catálogo y mantiene Mercado Libre como alternativa.
+- Con el mismo entorno y directorio de datos, `npm run pedidos` muestra las ventas y los datos de entrega en la terminal privada del vendedor. Tras comprobar un pago manual en la cuenta o recibir el efectivo, usar `node server.mjs --acreditar UUID`. Para cancelar un pedido manual pendiente y devolver sus unidades al stock, usar `node server.mjs --cancelar UUID`.
 
 ## Datos del producto
 
@@ -31,7 +39,7 @@ Los MP4, los subtítulos WebVTT y la portada del tutorial están en `assets/`. S
 
 ## Medición futura
 
-Los enlaces de compra llevan `data-event="mercadolibre_click"` y un atributo `data-placement` que identifica portada, carrito o seguridad. Hoy son atributos inertes. Cuando se autorice una herramienta de medición, registrar una activación del enlace (por teclado o toque) sin retrasar la navegación. Para comparar portadas, dividir las visitas móviles a la portada que incluyeron al menos un clic de compra por el total de visitas móviles a esa portada, usando el mismo período, origen y criterio de dispositivo. Contar cada visita una sola vez. Esta métrica mide salidas hacia la publicación, no ventas.
+Los enlaces a Mercado Libre llevan `data-event="mercadolibre_click"` y un atributo `data-placement`. Al habilitar la compra directa, el botón de portada y el del carrito pasan al checkout de ENVY y dejan de emitir esa señal. Hoy son atributos inertes. Cuando se autorice una herramienta de medición, registrar una activación del enlace (por teclado o toque) sin retrasar la navegación. Para comparar portadas, dividir las visitas móviles a la portada que incluyeron al menos un clic de compra por el total de visitas móviles a esa portada, usando el mismo período, origen y criterio de dispositivo. Contar cada visita una sola vez. Esta métrica mide salidas hacia la publicación, no ventas.
 
 ## Publicación
 Sitio publicado: https://envy-smart-living.honeypixie514.chatgpt.site
@@ -42,6 +50,6 @@ El código actual está en esta carpeta y sincronizado con [GitHub: bladeproduct
 
 Abrir esta carpeta completa en la herramienta elegida. Leer primero `AGENTS.md` y `COLABORACION.md`. Claude y Gemini tienen puntos de entrada `CLAUDE.md` y `GEMINI.md`. Las herramientas que no pueden editar carpetas pueden recibir el ZIP del proyecto.
 
-Con Node.js instalado, `npm run check` valida JavaScript y `npm run build` prepara `dist/` sin descargar dependencias. Nunca editar dist directamente.
+Con Node 24+, `npm run check` valida JavaScript y `npm run build` prepara los archivos públicos en `dist/`. Nunca editar dist directamente.
 
 Los cambios locales o futuros commits en GitHub NO actualizan automáticamente la web publicada. Para actualizar la dirección actual, usar la integración Sites y el proyecto identificado en `.openai/hosting.json`. Se puede migrar a otro hosting estático sin reescribir la web.

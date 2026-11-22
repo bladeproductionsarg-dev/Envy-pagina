@@ -1,7 +1,7 @@
-// Commercial configuration: reference price only. Checkout remains on Mercado Libre.
+// Sin servidor, la versión estática conserva la publicación de Mercado Libre.
 const config = {
   price: 20000,
-  max: 20,
+  max: 40,
   cartKey: "envy-static-cart-v1",
   themeKey: "envy-static-theme-v1",
 };
@@ -41,13 +41,17 @@ document.querySelectorAll("dialog").forEach((dialog) =>
     lastFocus?.focus();
   }),
 );
+let direct = false;
+let priceFor = () => config.price;
 function renderCart() {
   document.querySelector("#count").textContent = quantity;
   save(config.cartKey, String(quantity));
   document.querySelector("#cart-body").innerHTML = quantity
-    ? `<div class="cart-line"><img src="assets/a-tag-kit.png" alt="A Tag con llavero"><div><h3>A Tag</h3><p>${money(config.price)} por unidad</p></div></div><div class="quantity"><button id="minus" aria-label="Quitar una unidad">−</button><span>${quantity} ${quantity === 1 ? "unidad" : "unidades"}</span><button id="plus" aria-label="Agregar una unidad" ${quantity >= config.max ? "disabled" : ""}>+</button></div><div class="total"><span>Total de referencia</span><strong>${money(quantity * config.price)}</strong></div>`
+    ? `<div class="cart-line"><img src="assets/a-tag-kit.png" alt="A Tag con llavero"><div><h3>A Tag</h3><p>${money(priceFor(quantity))} por unidad</p></div></div><div class="quantity"><button id="minus" aria-label="Quitar una unidad">−</button><span>${quantity} ${quantity === 1 ? "unidad" : "unidades"}</span><button id="plus" aria-label="Agregar una unidad" ${quantity >= config.max ? "disabled" : ""}>+</button></div><div class="total"><span>${direct ? "Total del pedido" : "Total de referencia"}</span><strong>${money(quantity * priceFor(quantity))}</strong></div>`
     : "<p>Tu selección está vacía. Elegí un A Tag para empezar.</p>";
-  document.querySelector("#checkout").hidden = !quantity;
+  const checkout = document.querySelector("#checkout");
+  checkout.hidden = !quantity;
+  if (direct) checkout.href = "checkout.html?unidades=" + quantity;
   document.querySelector("#minus")?.addEventListener("click", () => {
     quantity--;
     renderCart();
@@ -64,14 +68,15 @@ function renderCart() {
     ).focus();
   });
 }
-document.querySelector("#packs").innerHTML = [1, 2, 4]
+function renderPacks() {
+ document.querySelector("#packs").innerHTML = (direct ? [1, 6, 15] : [1, 2, 4])
   .map((units) => {
     const label = units === 1 ? "1 unidad" : units + " unidades";
     return `<article class="pack">
       <h3>${label}</h3>
-      <div class="pack-price">${money(units * config.price)} <small>ARS</small></div>
-      <p>Total de referencia</p>
-      <button class="button secondary" data-add="${units}">Sumar ${label} al carrito</button>
+      <div class="pack-price">${money(units * priceFor(units))} <small>ARS</small></div>
+      <p>${direct ? money(priceFor(units)) + " por unidad" : "Total de referencia"}</p>
+      <button class="button secondary" data-add="${units}" ${direct && units>config.max ? "disabled" : ""}>Sumar ${label} al carrito</button>
     </article>`;
   })
   .join("");
@@ -82,6 +87,8 @@ document.querySelectorAll("[data-add]").forEach((button) =>
     openDialog(cart);
   }),
 );
+}
+renderPacks();
 document
   .querySelector("#cart-open")
   .addEventListener("click", () => openDialog(cart));
@@ -196,3 +203,31 @@ if (
 }
 document.querySelector("#year").textContent = new Date().getFullYear();
 renderCart();
+
+async function enableDirectStore() {
+  try {
+    const response = await fetch("/api/tienda", {cache:"no-store"});
+    if (!response.ok) return;
+    const shop = await response.json();
+    const catalog = await import("./catalog.mjs");
+    direct = true;
+    priceFor = catalog.unitPrice;
+    config.max = shop.stock;
+    quantity = Math.min(quantity, shop.stock);
+    const primary = document.querySelector(".hero-buy .button");
+    const checkout = document.querySelector("#checkout");
+    for (const link of [primary,checkout]) {
+      link.href = "checkout.html";
+      link.removeAttribute("target");
+      link.removeAttribute("data-event");
+      link.textContent = "Comprar en ENVY";
+    }
+    document.querySelector(".hero-buy p").textContent = shop.stock
+      ? "Retirá en Santos Lugares o recibí tu A Tag sin cargo en CABA."
+      : "A Tag agotado para venta directa.";
+    document.querySelector("#cart .fine").textContent = "El precio por unidad se calcula según la cantidad. Elegí entrega y pago al continuar.";
+    renderPacks();
+    renderCart();
+  } catch { /* La publicación externa sigue disponible en el alojamiento estático. */ }
+}
+if (location.protocol.startsWith("http")) enableDirectStore();

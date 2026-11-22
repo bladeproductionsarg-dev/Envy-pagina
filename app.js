@@ -11,6 +11,7 @@ const money = (value) =>
     currency: "ARS",
     maximumFractionDigits: 0,
   }).format(value);
+document.querySelector("#unit-price").textContent = money(config.price) + " ARS";
 const read = (key) => {
   try {
     return localStorage.getItem(key);
@@ -44,7 +45,7 @@ function renderCart() {
   document.querySelector("#count").textContent = quantity;
   save(config.cartKey, String(quantity));
   document.querySelector("#cart-body").innerHTML = quantity
-    ? `<div class="cart-line"><img src="assets/a-tag-kit.png" alt="A Tag con llavero"><div><h3>A Tag</h3><p>${money(config.price)} por unidad</p></div></div><div class="quantity"><button id="minus" aria-label="Quitar una unidad">−</button><span>${quantity} unidades</span><button id="plus" aria-label="Agregar una unidad" ${quantity >= config.max ? "disabled" : ""}>+</button></div><div class="total"><span>Total de referencia</span><strong>${money(quantity * config.price)}</strong></div>`
+    ? `<div class="cart-line"><img src="assets/a-tag-kit.png" alt="A Tag con llavero"><div><h3>A Tag</h3><p>${money(config.price)} por unidad</p></div></div><div class="quantity"><button id="minus" aria-label="Quitar una unidad">−</button><span>${quantity} ${quantity === 1 ? "unidad" : "unidades"}</span><button id="plus" aria-label="Agregar una unidad" ${quantity >= config.max ? "disabled" : ""}>+</button></div><div class="total"><span>Total de referencia</span><strong>${money(quantity * config.price)}</strong></div>`
     : "<p>Tu selección está vacía. Elegí un A Tag para empezar.</p>";
   document.querySelector("#checkout").hidden = !quantity;
   document.querySelector("#minus")?.addEventListener("click", () => {
@@ -63,30 +64,16 @@ function renderCart() {
     ).focus();
   });
 }
-document.querySelector("#packs").innerHTML = [
-  {
-    n: 1,
-    title: "Tu esencial",
-    label: "PARA EMPEZAR",
-    copy: "Uno para eso que siempre va con vos.",
-  },
-  {
-    n: 2,
-    title: "Dúo cotidiano",
-    label: "DOS OBJETOS. UNA IDEA.",
-    copy: "Tus llaves y tu mochila, acompañadas.",
-  },
-  {
-    n: 4,
-    title: "Todo conectado",
-    label: "PARA COMPARTIR",
-    copy: "Cuatro unidades para tus esenciales.",
-  },
-]
-  .map(
-    (pack, i) =>
-      `<article class="pack ${i === 1 ? "featured" : ""}"><span class="pack-label">${pack.label}</span><h3>${pack.title}</h3><p>${pack.n} ${pack.n === 1 ? "unidad" : "unidades"} de A Tag</p><div class="pack-price">${money(pack.n * config.price)} <small>ARS</small></div><p>${pack.copy}</p><button class="button ${i === 1 ? "" : "secondary"}" data-add="${pack.n}">Agregar ${pack.n === 1 ? "al carrito" : pack.n + " unidades"}</button><p class="fine">Referencia: ${money(config.price)} por unidad. Sin descuento de pack aplicado.</p></article>`,
-  )
+document.querySelector("#packs").innerHTML = [1, 2, 4]
+  .map((units) => {
+    const label = units === 1 ? "1 unidad" : units + " unidades";
+    return `<article class="pack">
+      <h3>${label}</h3>
+      <div class="pack-price">${money(units * config.price)} <small>ARS</small></div>
+      <p>Total de referencia</p>
+      <button class="button secondary" data-add="${units}">Sumar ${label} al carrito</button>
+    </article>`;
+  })
   .join("");
 document.querySelectorAll("[data-add]").forEach((button) =>
   button.addEventListener("click", () => {
@@ -124,7 +111,7 @@ document.querySelectorAll("[data-photo]").forEach((button) =>
   button.addEventListener("click", () => {
     const photo = document.querySelector("#product-photo");
     photo.src = "assets/" + button.dataset.photo;
-    photo.alt = button.getAttribute("aria-label");
+    photo.alt = button.dataset.alt;
     document
       .querySelectorAll("[data-photo]")
       .forEach((item) =>
@@ -150,13 +137,6 @@ document.querySelectorAll("[data-step]").forEach((button) =>
       .classList.toggle("locating", button.dataset.step === "2");
   }),
 );
-document.querySelector("#shipping-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-  document.querySelector("#shipping-result").textContent =
-    "Para el código " +
-    document.querySelector("#postal").value.toUpperCase() +
-    ", consultá costo y cobertura en Mercado Libre. Retiro en Santos Lugares disponible a coordinar.";
-});
 // Progressive enhancement: content remains visible if JavaScript or this API is unavailable.
 if (
   "IntersectionObserver" in window &&

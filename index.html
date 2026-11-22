@@ -42,8 +42,11 @@
           <p class="eyebrow">LOCALIZADOR DE OBJETOS</p>
           <h1 id="hero-title">A Tag <span>para tus llaves y tu mochila</span></h1>
         </div>
-        <img class="hero-photo" src="assets/a-tag-lifestyle.webp" width="960" height="960"
+        <a class="hero-film" id="watch-ad" href="assets/a-tag-anuncio-envy.mp4" aria-label="Ver anuncio del A Tag, 14 segundos">
+          <img class="hero-photo" src="assets/a-tag-lifestyle.webp" width="960" height="960"
           fetchpriority="high" alt="A Tag blanco en su llavero, enganchado a una llave sobre fondo oscuro" />
+          <span class="watch-label"><i class="play-icon" aria-hidden="true"></i> Ver anuncio <small>14 s</small></span>
+        </a>
         <div class="hero-price">
           <p>Precio de referencia por unidad</p>
           <strong id="unit-price">Consultá la publicación</strong>
@@ -110,6 +113,26 @@
         </div>
       </section>
       <section id="funciona" class="section how">
+        <div class="guide">
+          <div class="guide-intro reveal">
+            <p class="eyebrow">GUÍA EN VIDEO · 53 S</p>
+            <h2>Vinculá tu A Tag.</h2>
+            <p>Del primer encendido al mapa de tu celular. Elegí el tramo que corresponda a la red compatible con tu modelo.</p>
+          </div>
+          <div class="guide-stage">
+            <video id="guide-video" controls playsinline preload="none" width="720" height="1280"
+              poster="assets/a-tag-guia-portada.webp" aria-label="Guía de configuración de A Tag">
+              <source src="assets/a-tag-guia-envy.mp4" type="video/mp4" />
+              <track kind="captions" srclang="es" label="Español" src="assets/a-tag-guia.vtt" />
+              <a href="assets/a-tag-guia-envy.mp4">Abrir el tutorial</a>
+            </video>
+          </div>
+          <div class="chapters" hidden role="group" aria-label="Capítulos del tutorial">
+            <button data-start="0" aria-controls="guide-video"><i class="play-icon" aria-hidden="true"></i> Encender el A Tag <time>0:00</time></button>
+            <button data-start="11.5" aria-controls="guide-video"><i class="play-icon" aria-hidden="true"></i> Vincular con iPhone <time>0:12</time></button>
+            <button data-start="26.7" aria-controls="guide-video"><i class="play-icon" aria-hidden="true"></i> Vincular con Android <time>0:27</time></button>
+          </div>
+        </div>
         <div class="section-head reveal">
           <div>
             <p class="eyebrow">ASÍ DE SIMPLE</p>
@@ -312,6 +335,17 @@
       </div>
       <small>© <span id="year"></span> ENVY · Seguridad y domótica.</small>
     </footer>
+    <dialog id="ad-dialog" class="film-dialog" aria-labelledby="ad-heading">
+      <div class="dialog-head">
+        <h2 id="ad-heading">A Tag en detalle</h2>
+        <button class="icon" id="ad-close" aria-label="Cerrar anuncio">×</button>
+      </div>
+      <video id="ad-video" controls playsinline preload="none" width="720" height="720" aria-labelledby="ad-heading">
+        <source src="assets/a-tag-anuncio-envy.mp4" type="video/mp4" />
+        <track kind="captions" srclang="es" label="Español" src="assets/a-tag-anuncio.vtt" />
+        <a href="assets/a-tag-anuncio-envy.mp4">Abrir el anuncio</a>
+      </video>
+    </dialog>
     <dialog id="cart" aria-labelledby="cart-heading">
       <div class="dialog-head">
         <h2 id="cart-heading">Tu selección</h2>

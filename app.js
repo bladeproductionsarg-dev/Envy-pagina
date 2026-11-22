@@ -119,6 +119,45 @@ document.querySelectorAll("[data-photo]").forEach((button) =>
       );
   }),
 );
+// Native controls also work when an embedded browser requires a second tap to play.
+const guide = document.querySelector("#guide-video");
+const ad = document.querySelector("#ad-video");
+const adDialog = document.querySelector("#ad-dialog");
+const adLink = document.querySelector("#watch-ad");
+if (typeof adDialog.showModal === "function") {
+  adLink.setAttribute("aria-haspopup", "dialog");
+  adLink.addEventListener("click", (event) => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    guide.pause();
+    openDialog(adDialog);
+    ad.currentTime = 0;
+    ad.play().catch(() => {});
+  });
+}
+document.querySelector("#ad-close").addEventListener("click", () => adDialog.close());
+adDialog.addEventListener("close", () => ad.pause());
+
+const chapters = document.querySelector(".chapters");
+const chapterButtons = Array.from(chapters.querySelectorAll("button"));
+chapters.hidden = false;
+for (const button of chapterButtons) {
+  button.addEventListener("click", () => {
+    guide.currentTime = Number(button.dataset.start);
+    guide.play().catch(() => {});
+    guide.focus({ preventScroll: true });
+    guide.scrollIntoView({ block: "nearest" });
+  });
+}
+guide.addEventListener("timeupdate", () => {
+  const current = chapterButtons.filter((button) =>
+    Number(button.dataset.start) <= guide.currentTime).pop();
+  for (const button of chapterButtons) {
+    if (button === current) button.setAttribute("aria-current", "true");
+    else button.removeAttribute("aria-current");
+  }
+});
+
 const states = [
   "Tu A Tag, listo para conectar",
   "A Tag asociado a tu mochila · Demo",

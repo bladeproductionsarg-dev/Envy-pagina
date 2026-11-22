@@ -206,6 +206,8 @@ header .brand:hover .brand-glow {
   filter: brightness(1.12);
 }
 .hero {
+  position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
   grid-template-areas: "intro media" "price media" "purchase media";
@@ -213,8 +215,17 @@ header .brand:hover .brand-glow {
   column-gap: clamp(32px, 6vw, 100px);
   row-gap: 24px;
   padding: clamp(32px, 4.4vw, 72px) max(6%, calc((100% - 1280px) / 2));
-  background: var(--night);
+  background: radial-gradient(ellipse at 75% 18%, #182e49, transparent 67%), var(--night);
   color: #fff;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 3%, #ff913fb3 32%, #439369 76%, transparent);
+  transform-origin: left;
 }
 .hero-intro {
   grid-area: intro;
@@ -238,12 +249,48 @@ header .brand:hover .brand-glow {
   letter-spacing: -0.035em;
   line-height: 1.12;
 }
-.hero-photo {
+.hero-film {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   grid-area: media;
   align-self: center;
   width: 100%;
   height: auto;
   border-radius: 12px;
+}
+.hero-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform .55s ease-out;
+}
+.hero-film:hover .hero-photo, .hero-film:focus-visible .hero-photo {
+  transform: scale(1.025);
+}
+.watch-label {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: inline-flex;
+  gap: 9px;
+  align-items: center;
+  padding: 9px 16px;
+  border: 1px solid #738096;
+  border-radius: 999px;
+  background: #08101ef0;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+.watch-label small { color: #c6d1df; font-weight: 400; }
+.play-icon {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-block: 5px solid transparent;
+  border-left: 8px solid var(--orange);
 }
 .hero-price {
   grid-area: price;
@@ -828,7 +875,7 @@ dialog::backdrop {
     font-size: 10px;
     margin-bottom: 9px;
   }
-  .hero-photo {
+  .hero-film {
     max-width: 260px;
     border-radius: 8px;
   }
@@ -897,7 +944,90 @@ dialog::backdrop {
     grid-column: 1/-1;
   }
 }
+.guide {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.8fr);
+  grid-template-areas: "intro player" "chapters player";
+  gap: 26px 8%;
+  align-items: center;
+  margin-bottom: clamp(60px, 8vw, 120px);
+}
+.guide-intro { grid-area: intro; align-self: end; }
+.guide-intro .eyebrow { color: var(--ink); margin-bottom: 16px; }
+.guide-intro > p:last-child { max-width: 43ch; margin-top: 18px; }
+.guide-stage {
+  grid-area: player;
+  display: grid;
+  place-items: center;
+  padding: clamp(14px, 2.7vw, 42px);
+  border: 1px solid #2f4056;
+  border-radius: 18px;
+  background: radial-gradient(ellipse at 25% 15%, #203653, #0a1321 72%);
+}
+.guide-stage video {
+  display: block;
+  width: min(100%, 285px);
+  height: auto;
+  border-radius: 10px;
+  background: var(--night);
+  box-shadow: 0 16px 36px #0006;
+  scroll-margin-top: 108px;
+}
+.chapters { grid-area: chapters; align-self: start; }
+.chapters button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 4px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+}
+.chapters button:last-child { border-bottom: 1px solid var(--line); }
+.chapters time { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; }
+.chapters .play-icon { border-left-color: currentColor; }
+.chapters button[aria-current="true"] { font-weight: 700; }
+.chapters button[aria-current="true"] .play-icon { border-left-color: var(--orange); }
+.film-dialog {
+  width: min(600px, 94vw, 85vh);
+  padding: 14px;
+  background: var(--night);
+  color: #fff;
+  border-color: #364257;
+}
+.film-dialog .dialog-head { margin: 0 0 12px; }
+.film-dialog h2 { font-size: 20px; }
+.film-dialog video { display: block; width: 100%; height: auto; border-radius: 6px; }
+video:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+@media (max-width: 700px) {
+  .watch-label { bottom: 7px; right: 7px; padding: 4px 8px; gap: 5px; font-size: 12px; }
+  .guide { grid-template-columns: 1fr; grid-template-areas: "intro" "player" "chapters"; gap: 18px; }
+  .guide-stage { padding: 12px; }
+  .guide-stage video { width: min(100%, 250px, 42svh); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero::after { animation: light-line 1.1s .12s ease-out both; }
+  .hero-film { animation: film-entry .85s ease-out both; }
+  .hero-price { animation: rise .65s .12s both; }
+  .hero-buy { animation: rise .65s .2s both; }
+  .watch-label { animation: rise .55s .42s both; }
+  .film-dialog[open] { animation: rise .22s ease-out; }
+  .chapters .play-icon { transition: transform .2s; }
+  .chapters button:hover .play-icon, .chapters button:focus-visible .play-icon { transform: translateX(4px); }
+}
+@keyframes light-line {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+@keyframes film-entry {
+  from { opacity: .55; transform: translateY(10px) scale(.975); }
+  to { opacity: 1; transform: none; }
+}
 @media (prefers-reduced-motion: reduce) {
+  .hero-film:hover .hero-photo, .hero-film:focus-visible .hero-photo { transform: none; }
   html {
     scroll-behavior: auto;
   }

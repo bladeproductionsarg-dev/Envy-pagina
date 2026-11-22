@@ -21,6 +21,14 @@ Antes de publicar: confirmar precio, características, compatibilidad, garantía
 
 El catálogo anterior identifica el contenido como localizador A Tag y llavero, visibles en `assets/a-tag-kit.png`. La foto de portada es una copia WebP optimizada de `assets/a-tag-lifestyle.png`. La llave ilustra el uso. Para afirmar compatibilidad con Apple Find My o Google Find Hub, o una pila CR2032 reemplazable, hace falta la ficha o el manual del modelo exacto.
 
+## Videos de ENVY
+
+La foto principal abre el anuncio cuadrado de 14 segundos. La sección «Cómo funciona» contiene la guía vertical de 53 segundos, con accesos al encendido y a cada sistema. Son copias editadas de los videos facilitados por el propietario. Se conserva la narración de los tramos utilizados. Las cabeceras y el cierre del anuncio son de ENVY. La guía ilustra el procedimiento para cada red compatible.
+
+Para probar saltos directos a los capítulos, el servidor debe responder a solicitudes HTTP Range con 206 Partial Content.
+
+Los MP4, los subtítulos WebVTT y la portada del tutorial están en `assets/`. Se reproducen al interactuar y usan controles nativos. Al reemplazar un video hay que revisar también la duración, los subtítulos y los tiempos de los capítulos en `index.html`.
+
 ## Medición futura
 
 Los enlaces de compra llevan `data-event="mercadolibre_click"` y un atributo `data-placement` que identifica portada, carrito o seguridad. Hoy son atributos inertes. Cuando se autorice una herramienta de medición, registrar una activación del enlace (por teclado o toque) sin retrasar la navegación. Para comparar portadas, dividir las visitas móviles a la portada que incluyeron al menos un clic de compra por el total de visitas móviles a esa portada, usando el mismo período, origen y criterio de dispositivo. Contar cada visita una sola vez. Esta métrica mide salidas hacia la publicación, no ventas.

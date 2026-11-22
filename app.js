@@ -114,18 +114,49 @@ setTheme(read(config.themeKey) === "dark");
 theme.addEventListener("click", () =>
   setTheme(!document.body.classList.contains("dark")),
 );
-document.querySelectorAll("[data-photo]").forEach((button) =>
-  button.addEventListener("click", () => {
-    const photo = document.querySelector("#product-photo");
-    photo.src = "assets/" + button.dataset.photo;
-    photo.alt = button.dataset.alt;
-    document
-      .querySelectorAll("[data-photo]")
-      .forEach((item) =>
-        item.setAttribute("aria-pressed", String(item === button)),
+// Galería: cada botón muestra una foto; algunos además reproducen un clip corto encima.
+// El clip se detiene en su último cuadro. Con movimiento reducido solo se ve la foto.
+const photo = document.querySelector("#product-photo");
+const productVideo = document.querySelector("#product-video");
+const photoButtons = Array.from(document.querySelectorAll("[data-photo]"));
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+function showPhoto(button, { play = true } = {}) {
+  photo.src = "assets/" + button.dataset.photo;
+  photo.alt = button.dataset.alt;
+  for (const item of photoButtons)
+    item.setAttribute("aria-pressed", String(item === button));
+  productVideo.pause();
+  if (!button.dataset.video || !play || reduceMotion.matches) {
+    productVideo.hidden = true;
+    return;
+  }
+  productVideo.poster = "assets/" + button.dataset.poster;
+  productVideo.src = "assets/" + button.dataset.video;
+  productVideo.hidden = false;
+  productVideo.play().catch(() => {
+    productVideo.hidden = true;
+  });
+}
+for (const button of photoButtons)
+  button.addEventListener("click", () => showPhoto(button));
+productVideo.addEventListener("error", () => {
+  productVideo.hidden = true;
+});
+// El clip del contenido se reproduce una vez, cuando la galería entra en pantalla.
+if ("IntersectionObserver" in window && !reduceMotion.matches) {
+  const galleryObserver = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      galleryObserver.disconnect();
+      const current = photoButtons.find(
+        (item) => item.getAttribute("aria-pressed") === "true",
       );
-  }),
-);
+      if (current === photoButtons[0]) showPhoto(current);
+    },
+    { threshold: 0.6 },
+  );
+  galleryObserver.observe(document.querySelector(".product-media"));
+}
 // Native controls also work when an embedded browser requires a second tap to play.
 const guide = document.querySelector("#guide-video");
 const ad = document.querySelector("#ad-video");

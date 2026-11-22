@@ -370,11 +370,26 @@ header .brand:hover .brand-glow {
   margin-top: 4px;
   color: #445366;
 }
-.product-visual > img {
+.product-media {
+  position: relative;
+}
+.product-media > img,
+.product-media > video {
+  display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 1;
   object-fit: contain;
+}
+.product-media > video {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  object-fit: cover;
+  background: transparent;
+}
+.product-media > video[hidden] {
+  display: none;
 }
 .thumbs {
   display: flex;

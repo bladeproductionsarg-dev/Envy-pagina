@@ -62,26 +62,32 @@
         <div class="product-visual reveal">
           <h2 class="gallery-title">Qué incluye</h2>
           <p class="kit-contents">1 localizador A Tag + 1 llavero</p>
-          <img
-            id="product-photo" loading="lazy" width="1254" height="1254"
-            src="assets/a-tag-kit.png"
-            alt="Localizador A Tag y llavero blanco con argolla, uno al lado del otro"
-          />
+          <div class="product-media">
+            <img
+              id="product-photo" loading="lazy" width="1254" height="1254"
+              src="assets/a-tag-kit.png"
+              alt="Localizador A Tag y llavero blanco con argolla, uno al lado del otro"
+            />
+            <!-- Clips cortos y mudos. La foto de abajo conserva el texto alternativo; con movimiento reducido no se reproducen. -->
+            <video id="product-video" width="720" height="720" muted playsinline preload="none" hidden aria-hidden="true"></video>
+          </div>
           <div class="thumbs" aria-label="Fotos del producto">
             <button
               data-photo="a-tag-kit.png"
+              data-video="a-tag-kit-armado.mp4" data-poster="a-tag-kit-armado.webp"
               aria-label="Mostrar A Tag y llavero incluidos" data-alt="Localizador A Tag y llavero blanco con argolla, uno al lado del otro"
               aria-pressed="true"
             >
               Contenido</button
             ><button
-              data-photo="a-tag-front.png"
+              data-photo="a-tag-front-dark.png"
               aria-label="Ver frente" data-alt="Cara frontal blanca del A Tag"
               aria-pressed="false"
             >
               Frente</button
             ><button
               data-photo="a-tag-back.png"
+              data-video="a-tag-giro.mp4" data-poster="a-tag-giro.webp"
               aria-label="Ver reverso" data-alt="Tapa trasera del A Tag con flecha de apertura"
               aria-pressed="false"
             >

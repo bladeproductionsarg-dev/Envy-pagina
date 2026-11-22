@@ -37,6 +37,14 @@ Para probar saltos directos a los capítulos, el servidor debe responder a solic
 
 Los MP4, los subtítulos WebVTT y la portada del tutorial están en `assets/`. Se reproducen al interactuar y usan controles nativos. Al reemplazar un video hay que revisar también la duración, los subtítulos y los tiempos de los capítulos en `index.html`.
 
+### Clips de la galería «Qué incluye»
+
+Dos clips mudos generados con Gemini a partir de las fotos del producto, recortados a 720 × 720:
+- `a-tag-kit-armado.mp4` (4,5 s): el disco entra en el llavero. Se reproduce una vez cuando la galería entra en pantalla y al tocar «Contenido».
+- `a-tag-giro.mp4` (6,2 s): el A Tag gira del frente al reverso. Se reproduce al tocar «Reverso».
+
+Cada clip se detiene en su último cuadro. La foto queda debajo con su texto alternativo; el video es decorativo (`aria-hidden`). Con movimiento reducido no se reproducen y solo se ve la foto. «Frente» usa `a-tag-front-dark.png` para continuar el fondo oscuro del giro. Las portadas `.webp` son el primer cuadro de cada clip. Los botones de la galería indican el clip con `data-video` y `data-poster`.
+
 ## Medición futura
 
 Los enlaces a Mercado Libre llevan `data-event="mercadolibre_click"` y un atributo `data-placement`. Al habilitar la compra directa, el botón de portada y el del carrito pasan al checkout de ENVY y dejan de emitir esa señal. Hoy son atributos inertes. Cuando se autorice una herramienta de medición, registrar una activación del enlace (por teclado o toque) sin retrasar la navegación. Para comparar portadas, dividir las visitas móviles a la portada que incluyeron al menos un clic de compra por el total de visitas móviles a esa portada, usando el mismo período, origen y criterio de dispositivo. Contar cada visita una sola vez. Esta métrica mide salidas hacia la publicación, no ventas.

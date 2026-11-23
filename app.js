@@ -47,7 +47,7 @@ function renderCart() {
   document.querySelector("#count").textContent = quantity;
   save(config.cartKey, String(quantity));
   document.querySelector("#cart-body").innerHTML = quantity
-    ? `<div class="cart-line"><img src="assets/a-tag-kit.png" alt="A Tag con llavero"><div><h3>A Tag</h3><p>${money(priceFor(quantity))} por unidad</p></div></div><div class="quantity"><button id="minus" aria-label="Quitar una unidad">−</button><span>${quantity} ${quantity === 1 ? "unidad" : "unidades"}</span><button id="plus" aria-label="Agregar una unidad" ${quantity >= config.max ? "disabled" : ""}>+</button></div><div class="total"><span>${direct ? "Total del pedido" : "Total de referencia"}</span><strong>${money(quantity * priceFor(quantity))}</strong></div>`
+    ? `<div class="cart-line"><img src="assets/a-tag-kit-thumb.webp" width="240" height="240" alt="A Tag con llavero"><div><h3>A Tag</h3><p>${money(priceFor(quantity))} por unidad</p></div></div><div class="quantity"><button id="minus" aria-label="Quitar una unidad">−</button><span>${quantity} ${quantity === 1 ? "unidad" : "unidades"}</span><button id="plus" aria-label="Agregar una unidad" ${quantity >= config.max ? "disabled" : ""}>+</button></div><div class="total"><span>${direct ? "Total del pedido" : "Total de referencia"}</span><strong>${money(quantity * priceFor(quantity))}</strong></div>`
     : "<p>Tu selección está vacía. Elegí un A Tag para empezar.</p>";
   const checkout = document.querySelector("#checkout");
   checkout.hidden = !quantity;
@@ -180,6 +180,7 @@ async function enableDirectStore() {
     const shop = await (window.envyShop ||
       fetch("/api/tienda", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)));
     if (!shop) return;
+    document.body.classList.add("is-direct");
     // Primero el botón de la portada, sin esperar al catálogo.
     const primary = document.querySelector(".hero-buy .button");
     const checkout = document.querySelector("#checkout");
@@ -406,4 +407,59 @@ function reveal(ctx, at) {
   const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(render); } };
   addEventListener("scroll", schedule, { passive: true });
   addEventListener("resize", () => { measure(); schedule(); });
+})();
+
+// --- Demo «Así de simple»: los pasos avanzan solos mientras se ve; si la persona toca uno, se detiene.
+(function autoDemo() {
+  const steps = Array.from(document.querySelectorAll(".steps [data-step]"));
+  const box = document.querySelector(".steps");
+  if (!steps.length || !box || !motionAllowed || !("IntersectionObserver" in window)) return;
+  const STEP_MS = 3200;
+  let timer = 0, auto = false, stopped = false, current = 0;
+  for (const step of steps) {
+    step.addEventListener("click", () => {
+      current = Number(step.dataset.step);
+      if (auto) return;
+      stopped = true;
+      clearInterval(timer);
+      box.classList.remove("is-auto");
+    });
+  }
+  function advance() {
+    const next = steps[(current + 1) % steps.length];
+    auto = true;
+    next.click();
+    auto = false;
+    box.classList.remove("is-auto");
+    void box.offsetWidth; // reinicia la barra de progreso
+    box.classList.add("is-auto");
+  }
+  new IntersectionObserver((entries) => {
+    const visible = entries.some((e) => e.isIntersecting);
+    clearInterval(timer);
+    box.classList.remove("is-auto");
+    if (visible && !stopped) {
+      box.classList.add("is-auto");
+      timer = setInterval(advance, STEP_MS);
+    }
+  }, { threshold: 0.45 }).observe(document.querySelector(".demo-grid"));
+})();
+
+// --- Cierre «Mañana, tu hogar»: el emblema se dibuja al aparecer.
+(function futureEmblem() {
+  const future = document.querySelector(".future");
+  const source = document.querySelector(".hero .emblem");
+  if (!future || !source) return;
+  const copy = source.cloneNode(true);
+  copy.classList.add("emblem--mark");
+  copy.querySelector(".emblem-glint")?.remove();
+  future.prepend(copy);
+  if (!motionAllowed || !("IntersectionObserver" in window)) return;
+  future.classList.add("will-draw");
+  const io = new IntersectionObserver((entries) => {
+    if (!entries.some((e) => e.isIntersecting)) return;
+    io.disconnect();
+    future.classList.add("is-drawn");
+  }, { threshold: 0.5 });
+  io.observe(copy);
 })();

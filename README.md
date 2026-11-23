@@ -46,7 +46,17 @@ Todo el movimiento se dibuja con imágenes transparentes sobre el azul noche de 
 - **Recorrido «Así es por fuera» (`#producto`):** la escena queda fija mientras el scroll cambia la vista: frente con un reflejo, giro hasta el reverso con acercamiento a las flechas, y vuelta al frente para que aparezca el llavero alrededor del mismo disco (`assets/tag/llavero.webp`, recorte de `a-tag-lifestyle.png` alineado con el disco del giro).
 - **Movimiento reducido o sin JavaScript:** no hay intro; la portada muestra el emblema completo y el A Tag quieto, y el recorrido se ve como tres vistas fijas con su texto.
 
-La lógica está al final de `app.js` (`heroTag` y `productTour`). La intro se decide en un script del `<head>` de `index.html` (clases `motion` e `intro` en `<html>`). El anuncio cuadrado de 14 s (`a-tag-anuncio-envy.mp4`) ya no se muestra en la página.
+- **Más abajo:** la demo «Así de simple» avanza sola mientras se ve (se detiene si la persona toca un paso) y el cierre «Mañana, tu hogar» dibuja el emblema al aparecer.
+
+### Textos según cómo se compra
+
+En alojamiento estático (GitHub Pages, Sites) la compra continúa en Mercado Libre; con `server.mjs` responde `/api/tienda` y la página pasa a compra directa (`body.is-direct`). Los textos que dependen de eso van en pares `<span class="only-static">` / `<span class="only-direct">`: precio de la portada, texto bajo el botón, cinta, «Elegí la cantidad», envío, seguridad y pago. Al cambiar una condición comercial, revisar los dos.
+
+### Imágenes livianas y vista al compartir
+
+Las miniaturas usan versiones chicas (`favicon-64.png`, `apple-touch-icon.png`, `logo-96.png`, `a-tag-kit-thumb.webp`, `a-tag-front-thumb.webp`); los PNG originales quedan en `assets/` sin cargarse. `assets/og-envy.jpg` (1200 × 630) es la imagen que muestran WhatsApp y las redes al compartir el link (metas `og:` en `index.html`, con la dirección de GitHub Pages).
+
+La lógica está al final de `app.js` (`heroTag`, `productTour`, `autoDemo`, `futureEmblem`). La intro se decide en un script del `<head>` de `index.html` (clases `motion` e `intro` en `<html>`). El anuncio cuadrado de 14 s (`a-tag-anuncio-envy.mp4`) ya no se muestra en la página.
 
 ## Medición futura
 

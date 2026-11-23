@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 :root {
   --night: #070d18;
   --navy: #102341;
@@ -938,6 +937,10 @@ video:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 [hidden] {
   display: none !important;
 }
+/* Textos según cómo se compra: estático (Mercado Libre) o tienda directa con servidor */
+.only-direct { display: none !important; }
+.is-direct .only-direct { display: inline !important; }
+.is-direct .only-static { display: none !important; }
 
 /* ===== Portada: emblema + A Tag sobre azul noche, sin recuadro ===== */
 .hero-visual {
@@ -1203,3 +1206,43 @@ video:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
   .tour.is-motion .tour-step.is-active { opacity: 1; transform: none; }
   .notes-grid { grid-template-columns: 1fr; }
 }
+
+/* Demo que avanza sola: barra de progreso en el paso activo */
+.step { position: relative; }
+.steps.is-auto .step.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--orange);
+  transform-origin: left;
+  animation: step-progress 3.2s linear both;
+}
+@keyframes step-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Emblema del cierre */
+.future .emblem--mark {
+  position: static;
+  display: block;
+  width: 84px;
+  height: auto;
+  aspect-ratio: 955 / 1045;
+  margin: 0 auto 26px;
+}
+.future .emblem--mark .piece { fill: #11264a; stroke: #11264a; stroke-opacity: 1; }
+body.dark .future .emblem--mark .piece { stroke: #9ab8e4; stroke-opacity: 0.3; }
+@media (prefers-reduced-motion: no-preference) {
+  .future.will-draw .emblem--mark .piece { stroke: #11264a; stroke-dasharray: 1; stroke-dashoffset: 1; fill-opacity: 0; }
+  .future.will-draw .emblem--mark .emblem-orange,
+  .future.will-draw .emblem--mark .emblem-green { opacity: 0; }
+  .future.is-drawn .emblem--mark .piece {
+    animation:
+      emblem-draw-mark 0.7s calc(var(--i) * 60ms) cubic-bezier(0.3, 0.6, 0.2, 1) forwards,
+      emblem-fill 0.5s calc(0.35s + var(--i) * 45ms) ease-out forwards;
+  }
+  .future.is-drawn .emblem--mark .emblem-orange { animation: emblem-show 0.35s 0.75s ease-out forwards; }
+  .future.is-drawn .emblem--mark .emblem-green { animation: emblem-green 0.5s 0.95s ease-out forwards; }
+}
+@keyframes emblem-draw-mark { to { stroke-dashoffset: 0; } }

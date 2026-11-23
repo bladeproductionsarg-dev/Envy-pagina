@@ -9,8 +9,24 @@
       content="Envy. Descubrí A Tag, tecnología para acompañar tus objetos. Retiro en Santos Lugares y entrega a coordinar."
     />
     <title>A Tag para llaves y mochilas | ENVY</title>
-    <link rel="icon" href="assets/logo.png" />
+    <!-- Vista previa al compartir el link (WhatsApp, redes). La imagen necesita una dirección absoluta. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ENVY" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:title" content="A Tag para tus llaves y tu mochila | ENVY" />
+    <meta property="og:description" content="Mirá cómo es el A Tag por fuera, con su llavero, y elegí cuántos necesitás." />
+    <meta property="og:url" content="https://bladeproductionsarg-dev.github.io/Envy-pagina/" />
+    <meta property="og:image" content="https://bladeproductionsarg-dev.github.io/Envy-pagina/assets/og-envy.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A Tag blanco sobre el emblema de ENVY" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="assets/favicon-64.png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
     <style>html{background:#070d18}</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
     <link rel="stylesheet" href="styles.css" />
     <link rel="preload" as="image" href="assets/tag/giro-00.webp" />
     <script>
@@ -83,16 +99,16 @@
           </div>
         </div>
         <div class="hero-price">
-          <p>Precio por unidad · de 1 a 5</p>
+          <p><span class="only-static">Precio de referencia por unidad</span><span class="only-direct">Precio por unidad · de 1 a 5</span></p>
           <strong id="unit-price">$ 20.000 ARS</strong>
         </div>
         <div class="hero-buy">
           <a class="button" href="https://articulo.mercadolibre.com.ar/MLA-2282184321"
             data-event="mercadolibre_click" data-placement="portada">Comprar en Mercado Libre<span aria-hidden="true">↗</span></a>
-          <p>Precio de venta directa en ENVY. Consultá el precio de Mercado Libre en su publicación.</p>
+          <p>La compra se completa en Mercado Libre. Ahí ves el precio vigente, el envío y los medios de pago.</p>
         </div>
       </section>
-      <div class="ribbon">Retiro en Santos Lugares o envío gratis en CABA.</div>
+      <div class="ribbon"><span class="only-static">Comprá con los medios de pago y envíos de Mercado Libre.</span><span class="only-direct">Retiro en Santos Lugares o envío gratis en CABA.</span></div>
       <section id="producto" class="tour" aria-labelledby="tour-title">
         <div class="tour-sticky">
           <div class="tour-copy">
@@ -192,7 +208,7 @@
             <div class="orbit two"></div>
             <div class="orbit three"></div>
             <div class="tag-point">
-              <img src="assets/a-tag-front.png" alt="A Tag de demostración" />
+              <img src="assets/a-tag-front-thumb.webp" width="200" height="200" alt="A Tag de demostración" />
             </div>
             <div class="demo-top">
               <span>ENVY / EXPLORAR</span
@@ -238,14 +254,14 @@
             <h2>Elegí la cantidad</h2>
           </div>
           <p>
-            Precio por unidad según la cantidad total de A Tag del pedido.
+            <span class="only-direct">Precio por unidad según la cantidad total de A Tag del pedido.</span><span class="only-static">Totales de referencia. En Mercado Libre elegís de nuevo la cantidad.</span>
           </p>
         </div>
         <div class="packs" id="packs"></div>
         <div class="shipping">
           <div>
             <h3>Elegí cómo recibirlo</h3>
-            <p>Retiro en Santos Lugares o envío gratis en CABA.</p>
+            <p><span class="only-direct">Retiro en Santos Lugares o envío gratis en CABA.</span><span class="only-static">El costo y la cobertura del envío se confirman en la publicación de Mercado Libre.</span></p>
           </div>
         </div>
       </section>
@@ -254,7 +270,7 @@
           <p class="eyebrow">COMPRÁ CON INFORMACIÓN CLARA</p>
           <h2>La confianza empieza<br />por saber qué comprás.</h2>
           <p>
-            En ENVY podés revisar las cantidades, la entrega y el total antes de confirmar. También podés elegir la publicación de Mercado Libre.
+            <span class="only-direct">En ENVY podés revisar las cantidades, la entrega y el total antes de confirmar. También podés elegir la publicación de Mercado Libre.</span><span class="only-static">Tu compra se completa en Mercado Libre, donde revisás el precio vigente, la disponibilidad y las condiciones del vendedor.</span>
           </p>
           <a
             class="button"
@@ -271,7 +287,7 @@
             <span>◎</span>
             <h3>Pago en la plataforma</h3>
             <p>
-              En la compra directa podés pagar por transferencia o al recibir. Los medios habilitados aparecen al finalizar el pedido.
+              <span class="only-direct">En la compra directa podés pagar por transferencia o al recibir. Los medios habilitados aparecen al finalizar el pedido.</span><span class="only-static">Pagás con los medios que ofrece Mercado Libre en la publicación.</span>
             </p>
           </article>
           <article>
@@ -360,7 +376,7 @@
     </main>
     <footer>
       <a class="brand" href="#principal"
-        ><img src="assets/logo.png" alt="" /><span>ENVY</span></a
+        ><img src="assets/logo-96.png" width="96" height="110" alt="" /><span>ENVY</span></a
       >
       <p>Tecnología para vivir tranquilo.<br />Santos Lugares, Argentina.</p>
       <div>

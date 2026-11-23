@@ -10,7 +10,27 @@
     />
     <title>A Tag para llaves y mochilas | ENVY</title>
     <link rel="icon" href="assets/logo.png" />
+    <style>html{background:#070d18}</style>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="preload" as="image" href="assets/tag/giro-00.webp" />
+    <script>
+      // Consulta temprana de la venta directa: el botón de compra cambia apenas responde el servidor.
+      window.envyShop = location.protocol.startsWith("http")
+        ? fetch("/api/tienda", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)).catch(() => null)
+        : Promise.resolve(null);
+    </script>
+    <script>
+      // La intro del emblema se muestra una vez por sesión y nunca con movimiento reducido.
+      (function () {
+        var seen = false;
+        try { seen = sessionStorage.getItem("envy-intro") === "1"; } catch (e) {}
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        document.documentElement.classList.add("motion");
+        if (seen) return;
+        document.documentElement.classList.add("intro");
+        try { sessionStorage.setItem("envy-intro", "1"); } catch (e) {}
+      })();
+    </script>
     <script src="app.js" defer></script>
   </head>
   <body>
@@ -42,14 +62,29 @@
           <p class="eyebrow">LOCALIZADOR DE OBJETOS</p>
           <h1 id="hero-title">A Tag <span>para tus llaves y tu mochila</span></h1>
         </div>
-        <a class="hero-film" id="watch-ad" href="assets/a-tag-anuncio-envy.mp4" aria-label="Ver anuncio del A Tag, 14 segundos">
-          <img class="hero-photo" src="assets/a-tag-lifestyle.webp" width="960" height="960"
-          fetchpriority="high" alt="A Tag blanco en su llavero, enganchado a una llave sobre fondo oscuro" />
-          <span class="watch-label"><i class="play-icon" aria-hidden="true"></i> Ver anuncio <small>14 s</small></span>
-        </a>
+        <div class="hero-visual">
+          <svg class="emblem" viewBox="0 0 955 1045" aria-hidden="true" focusable="false">
+            <g class="emblem-navy">
+              <path class="piece" style="--i:0" pathLength="1" d="M586,54L562,41L522,16L507,9L493,5L486,5L485,4L463,5L445,10L433,16L411,30L404,33L325,80L316,84L297,96L285,102L280,106L264,114L247,125L236,130L231,134L179,163L179,181L178,182L178,275L177,276L177,286L178,287L185,286L259,243L280,232L287,227L296,223L363,184L441,141L485,115L494,111L508,102L582,61L586,58Z"/>
+              <path class="piece" style="--i:1" pathLength="1" d="M505,147L505,151L510,155L554,181L591,205L606,213L641,236L667,251L673,256L712,279L723,287L740,296L751,304L761,309L784,324L791,327L818,344L830,350L942,419L947,418L947,312L944,296L935,274L923,256L908,241L892,230L878,223L861,212L854,209L809,182L788,171L776,163L765,158L753,150L739,143L720,131L711,127L699,119L671,104L629,79L623,80Z"/>
+              <path class="piece" style="--i:2" pathLength="1" d="M125,194L83,219L69,226L44,242L27,259L22,266L10,290L5,311L5,337L4,338L4,349L5,350L4,354L4,365L5,366L4,369L4,381L5,382L4,385L4,404L5,405L5,413L4,414L4,478L5,479L4,555L95,611L126,631L130,631L131,630L130,195Z"/>
+              <path class="piece" style="--i:3" pathLength="1" d="M480,226L476,226L405,267L389,275L377,283L375,283L345,301L334,306L292,331L248,355L241,360L218,372L217,672L246,690L265,700L275,707L284,711L294,718L300,721L305,721L416,657L416,652L374,626L369,624L358,616L342,607L338,603L338,447L352,438L361,434L368,429L475,368L526,397L531,401L552,412L560,418L581,429L611,448L611,605L478,683L459,693L440,705L433,708L303,783L298,782L271,765L239,747L231,741L224,738L219,734L179,711L174,707L172,707L151,694L92,661L85,656L78,653L8,612L4,613L4,669L5,670L4,673L4,686L5,687L4,721L5,722L5,733L8,747L12,758L18,770L30,787L46,802L76,821L81,823L92,831L117,845L125,851L134,855L158,870L181,882L209,899L218,903L274,936L281,936L308,920L326,911L336,904L349,898L368,886L377,882L426,853L472,828L498,812L505,809L512,804L519,801L547,784L586,763L593,758L616,746L623,741L736,677L736,375L689,348L684,344L675,340L653,326L615,305L603,297L549,267L539,260L513,246L508,242L499,238Z"/>
+              <path class="piece" style="--i:4" pathLength="1" d="M823,390L822,391L822,849L826,850L848,836L857,832L883,816L895,810L913,797L925,784L934,771L943,751L947,734L947,725L948,724L948,677L947,676L947,661L948,660L948,623L947,622L947,467L864,415L850,405L842,401L828,391Z"/>
+              <path class="piece" style="--i:5" pathLength="1" d="M780,729L776,728L681,784L614,822L597,833L590,836L585,840L551,859L539,867L532,870L522,877L477,902L440,925L397,949L377,962L361,970L350,977L350,982L355,984L375,997L382,1000L402,1013L409,1016L429,1029L441,1034L458,1038L484,1038L485,1037L490,1037L505,1032L517,1026L568,996L584,988L591,983L670,939L675,935L693,926L705,918L716,913L721,909L780,876Z"/>
+            </g>
+            <path class="emblem-orange" d="M625,77L593,58L585,57L180,287L178,285L179,166L175,165L163,173L130,191L129,196L129,222L130,223L130,565L131,566L131,630L129,631L8,555L4,556L4,612L11,615L108,672L122,679L167,706L172,707L173,706L172,352L171,351L172,337L188,327L231,304L252,291L284,274L300,264L316,256L624,82Z"/>
+            <path class="emblem-green" d="M781,321L780,322L780,433L779,434L779,444L780,445L779,450L779,460L780,461L780,467L779,468L779,873L783,874L823,851L823,393L826,392L840,402L848,406L862,416L943,467L947,466L947,420L934,411L837,353L832,349L820,343L784,321Z"/>
+            <path class="emblem-glint" pathLength="1" d="M625,77L593,58L585,57L180,287L178,285L179,166L175,165L163,173L130,191L129,196L129,222L130,223L130,565L131,566L131,630L129,631L8,555L4,556L4,612L11,615L108,672L122,679L167,706L172,707L173,706L172,352L171,351L172,337L188,327L231,304L252,291L284,274L300,264L316,256L624,82Z"/>
+          </svg>
+          <div class="tag-world">
+            <img class="tag-still" src="assets/tag/giro-00.webp" width="560" height="560"
+              fetchpriority="high" alt="A Tag blanco, visto de frente en leve ángulo" />
+            <canvas class="tag-canvas" width="560" height="560" aria-hidden="true"></canvas>
+          </div>
+        </div>
         <div class="hero-price">
           <p>Precio por unidad · de 1 a 5</p>
-          <strong id="unit-price">Consultá la publicación</strong>
+          <strong id="unit-price">$ 20.000 ARS</strong>
         </div>
         <div class="hero-buy">
           <a class="button" href="https://articulo.mercadolibre.com.ar/MLA-2282184321"
@@ -58,45 +93,43 @@
         </div>
       </section>
       <div class="ribbon">Retiro en Santos Lugares o envío gratis en CABA.</div>
-      <section id="producto" class="section product">
-        <div class="product-visual reveal">
-          <h2 class="gallery-title">Qué incluye</h2>
-          <p class="kit-contents">1 localizador A Tag + 1 llavero</p>
-          <div class="product-media">
-            <img
-              id="product-photo" loading="lazy" width="1254" height="1254"
-              src="assets/a-tag-kit.png"
-              alt="Localizador A Tag y llavero blanco con argolla, uno al lado del otro"
-            />
-            <!-- Clips cortos y mudos. La foto de abajo conserva el texto alternativo; con movimiento reducido no se reproducen. -->
-            <video id="product-video" width="720" height="720" muted playsinline preload="none" hidden aria-hidden="true"></video>
+      <section id="producto" class="tour" aria-labelledby="tour-title">
+        <div class="tour-sticky">
+          <div class="tour-copy">
+            <p class="eyebrow">CONOCÉ A TAG</p>
+            <h2 id="tour-title">Así es por fuera.</h2>
+            <ol class="tour-steps">
+              <li class="tour-step" data-step="0">
+                <img class="tour-figure" src="assets/tag/giro-00.webp" width="560" height="560" loading="lazy"
+                  alt="Frente del A Tag: cara blanca y lisa" />
+                <div><span class="tour-num">01</span><h3>Frente</h3>
+                <p>Una cara blanca y lisa, con el borde redondeado.</p></div>
+              </li>
+              <li class="tour-step" data-step="1">
+                <img class="tour-figure" src="assets/tag/giro-52.webp" width="560" height="560" loading="lazy"
+                  alt="Reverso del A Tag con dos flechas curvas y la inscripción A Tag" />
+                <div><span class="tour-num">02</span><h3>Reverso</h3>
+                <p>La tapa trasera lleva dos flechas que marcan el sentido de giro y la identificación A Tag.</p></div>
+              </li>
+              <li class="tour-step" data-step="2">
+                <img class="tour-figure tour-figure--wide" src="assets/tag/llavero.webp" width="900" height="830" loading="lazy"
+                  alt="A Tag dentro de su llavero blanco, con argolla y una llave" />
+                <div><span class="tour-num">03</span><h3>Con su llavero</h3>
+                <p>Encaja en el soporte con argolla que viene incluido. Así lo sumás a tus llaves o a la mochila.</p></div>
+              </li>
+            </ol>
           </div>
-          <div class="thumbs" aria-label="Fotos del producto">
-            <button
-              data-photo="a-tag-kit.png"
-              data-video="a-tag-kit-armado.mp4" data-poster="a-tag-kit-armado.webp"
-              aria-label="Mostrar A Tag y llavero incluidos" data-alt="Localizador A Tag y llavero blanco con argolla, uno al lado del otro"
-              aria-pressed="true"
-            >
-              Contenido</button
-            ><button
-              data-photo="a-tag-front-dark.png"
-              aria-label="Ver frente" data-alt="Cara frontal blanca del A Tag"
-              aria-pressed="false"
-            >
-              Frente</button
-            ><button
-              data-photo="a-tag-back.png"
-              data-video="a-tag-giro.mp4" data-poster="a-tag-giro.webp"
-              aria-label="Ver reverso" data-alt="Tapa trasera del A Tag con flecha de apertura"
-              aria-pressed="false"
-            >
-              Reverso
-            </button>
+          <div class="tour-visual" aria-hidden="true">
+            <div class="tour-world">
+              <img class="tour-key" src="assets/tag/llavero.webp" width="900" height="830" alt="" loading="lazy" />
+              <canvas class="tour-canvas" width="560" height="560"></canvas>
+            </div>
           </div>
         </div>
-        <div class="product-copy reveal">
-          <h2>Antes de elegir tu A Tag</h2>
+      </section>
+      <section class="section product-notes" aria-labelledby="notes-title">
+          <h2 id="notes-title">Antes de elegir tu A Tag</h2>
+          <div class="notes-grid">
           <div class="feature">
             <div>
               <h3>¿Funciona con mi celular?</h3>
@@ -115,8 +148,8 @@
               <p>Antes de comprar, confirmá con el vendedor el tipo de pila, si podés cambiarla y la autonomía de esta versión.</p>
             </div>
           </div>
+          </div>
           <a class="text-link" href="https://articulo.mercadolibre.com.ar/MLA-2282184321">Consultar el modelo en Mercado Libre</a>
-        </div>
       </section>
       <section id="funciona" class="section how">
         <div class="guide">
@@ -129,7 +162,7 @@
             <video id="guide-video" controls playsinline preload="none" width="720" height="1280"
               poster="assets/a-tag-guia-portada.webp" aria-label="Guía de configuración de A Tag">
               <source src="assets/a-tag-guia-envy.mp4" type="video/mp4" />
-              <track kind="captions" srclang="es" label="Español" src="assets/a-tag-guia.vtt" />
+              <track kind="captions" srclang="es" label="Español" src="assets/a-tag-guia.vtt" default />
               <a href="assets/a-tag-guia-envy.mp4">Abrir el tutorial</a>
             </video>
           </div>
@@ -336,17 +369,6 @@
       </div>
       <small>© <span id="year"></span> ENVY · Seguridad y domótica.</small>
     </footer>
-    <dialog id="ad-dialog" class="film-dialog" aria-labelledby="ad-heading">
-      <div class="dialog-head">
-        <h2 id="ad-heading">A Tag en detalle</h2>
-        <button class="icon" id="ad-close" aria-label="Cerrar anuncio">×</button>
-      </div>
-      <video id="ad-video" controls playsinline preload="none" width="720" height="720" aria-labelledby="ad-heading">
-        <source src="assets/a-tag-anuncio-envy.mp4" type="video/mp4" />
-        <track kind="captions" srclang="es" label="Español" src="assets/a-tag-anuncio.vtt" />
-        <a href="assets/a-tag-anuncio-envy.mp4">Abrir el anuncio</a>
-      </video>
-    </dialog>
     <dialog id="cart" aria-labelledby="cart-heading">
       <div class="dialog-head">
         <h2 id="cart-heading">Tu selección</h2>

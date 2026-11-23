@@ -230,7 +230,6 @@ header .brand:hover .brand-glow {
 .hero-intro {
   grid-area: intro;
   align-self: end;
-  animation: rise 0.6s ease both;
 }
 .hero .eyebrow {
   margin-bottom: 16px;
@@ -249,42 +248,6 @@ header .brand:hover .brand-glow {
   letter-spacing: -0.035em;
   line-height: 1.12;
 }
-.hero-film {
-  display: block;
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  grid-area: media;
-  align-self: center;
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-}
-.hero-photo {
-  display: block;
-  width: 100%;
-  height: auto;
-  transition: transform .55s ease-out;
-}
-.hero-film:hover .hero-photo, .hero-film:focus-visible .hero-photo {
-  transform: scale(1.025);
-}
-.watch-label {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  display: inline-flex;
-  gap: 9px;
-  align-items: center;
-  padding: 9px 16px;
-  border: 1px solid #738096;
-  border-radius: 999px;
-  background: #08101ef0;
-  color: white;
-  font-weight: 600;
-  font-size: 14px;
-}
-.watch-label small { color: #c6d1df; font-weight: 400; }
 .play-icon {
   display: inline-block;
   width: 0;
@@ -347,69 +310,6 @@ header .brand:hover .brand-glow {
 }
 .section {
   padding: 100px 7%;
-}
-.product {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 9%;
-  align-items: center;
-}
-.product-visual {
-  position: relative;
-  background: white;
-  border: 1px solid #e7ebf0;
-  border-radius: 14px;
-  overflow: hidden;
-  padding: 30px 25px 20px;
-  color: var(--navy);
-}
-.gallery-title {
-  font-size: 23px;
-}
-.kit-contents {
-  margin-top: 4px;
-  color: #445366;
-}
-.product-media {
-  position: relative;
-}
-.product-media > img,
-.product-media > video {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: contain;
-}
-.product-media > video {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-  object-fit: cover;
-  background: transparent;
-}
-.product-media > video[hidden] {
-  display: none;
-}
-.thumbs {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-.thumbs button {
-  background: white;
-  border: 1px solid #d6dde7;
-  padding: 8px 14px;
-  border-radius: 5px;
-  font-size: 12px;
-  color: var(--navy);
-}
-.thumbs button[aria-pressed="true"] {
-  border-color: var(--orange);
-  background: #fff4eb;
-}
-.product-copy h2 {
-  margin-bottom: 24px;
 }
 .feature {
   display: flex;
@@ -872,11 +772,11 @@ dialog::backdrop {
     margin-left: auto;
   }
   .hero {
-    grid-template-columns: 1.15fr 1fr;
-    grid-template-areas: "intro intro" "media price" "purchase purchase";
+    grid-template-columns: 1fr;
+    grid-template-areas: "intro" "media" "price" "purchase";
     grid-template-rows: auto;
-    gap: 18px;
-    padding: clamp(18px, 4vw, 28px) 6% 24px;
+    gap: 10px;
+    padding: clamp(16px, 4vw, 26px) 6% 26px;
   }
   .hero h1 {
     font-size: clamp(40px, 10vw, 62px);
@@ -890,12 +790,8 @@ dialog::backdrop {
     font-size: 10px;
     margin-bottom: 9px;
   }
-  .hero-film {
-    max-width: 260px;
-    border-radius: 8px;
-  }
   .hero-price {
-    align-self: center;
+    margin-top: 2px;
   }
   .hero-price strong {
     font-size: clamp(21px, 4.9vw, 28px);
@@ -918,7 +814,6 @@ dialog::backdrop {
   .section {
     padding: 60px 6%;
   }
-  .product,
   .demo-grid,
   .security,
   .faq {
@@ -1006,30 +901,14 @@ dialog::backdrop {
 .chapters .play-icon { border-left-color: currentColor; }
 .chapters button[aria-current="true"] { font-weight: 700; }
 .chapters button[aria-current="true"] .play-icon { border-left-color: var(--orange); }
-.film-dialog {
-  width: min(600px, 94vw, 85vh);
-  padding: 14px;
-  background: var(--night);
-  color: #fff;
-  border-color: #364257;
-}
-.film-dialog .dialog-head { margin: 0 0 12px; }
-.film-dialog h2 { font-size: 20px; }
-.film-dialog video { display: block; width: 100%; height: auto; border-radius: 6px; }
 video:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 @media (max-width: 700px) {
-  .watch-label { bottom: 7px; right: 7px; padding: 4px 8px; gap: 5px; font-size: 12px; }
   .guide { grid-template-columns: 1fr; grid-template-areas: "intro" "player" "chapters"; gap: 18px; }
   .guide-stage { padding: 12px; }
   .guide-stage video { width: min(100%, 250px, 42svh); }
 }
 @media (prefers-reduced-motion: no-preference) {
   .hero::after { animation: light-line 1.1s .12s ease-out both; }
-  .hero-film { animation: film-entry .85s ease-out both; }
-  .hero-price { animation: rise .65s .12s both; }
-  .hero-buy { animation: rise .65s .2s both; }
-  .watch-label { animation: rise .55s .42s both; }
-  .film-dialog[open] { animation: rise .22s ease-out; }
   .chapters .play-icon { transition: transform .2s; }
   .chapters button:hover .play-icon, .chapters button:focus-visible .play-icon { transform: translateX(4px); }
 }
@@ -1042,7 +921,6 @@ video:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
   to { opacity: 1; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-film:hover .hero-photo, .hero-film:focus-visible .hero-photo { transform: none; }
   html {
     scroll-behavior: auto;
   }
@@ -1059,4 +937,269 @@ video:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 }
 [hidden] {
   display: none !important;
+}
+
+/* ===== Portada: emblema + A Tag sobre azul noche, sin recuadro ===== */
+.hero-visual {
+  grid-area: media;
+  position: relative;
+  align-self: center;
+  justify-self: center;
+  width: min(100%, 520px);
+  aspect-ratio: 955 / 1045;
+}
+.hero-visual::before {
+  /* luz ambiente que separa el producto del fondo, sin bordes */
+  content: "";
+  position: absolute;
+  inset: 8% 4% 12%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #8fb3ec2e, #8fb3ec0d 55%, transparent);
+  pointer-events: none;
+}
+.emblem {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.emblem .piece {
+  fill: #11264a;
+  stroke: #9ab8e4;
+  stroke-opacity: 0.3;
+  stroke-width: 1.3;
+  vector-effect: non-scaling-stroke;
+}
+.emblem-orange { fill: #fc8335; }
+.emblem-green {
+  fill: #2b764c;
+  filter: drop-shadow(0 0 5px #3fbf7a59);
+}
+.emblem-glint {
+  fill: none;
+  stroke: #ffe2c4;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 0.12 0.88;
+  stroke-dashoffset: 0.12;
+  opacity: 0;
+  filter: drop-shadow(0 0 7px #ff9a4a);
+}
+.tag-world {
+  /* centro del hexágono interior del emblema */
+  position: absolute;
+  left: 49.7%;
+  top: 46.5%;
+  width: 68%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+.tag-still,
+.tag-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.tag-world.is-live .tag-still { visibility: hidden; }
+.tag-canvas { pointer-events: none; }
+
+/* Intro: una vez por sesión (clase .intro en <html>), ~1,5 s, sin tapar título ni compra */
+@media (prefers-reduced-motion: no-preference) {
+  .intro .emblem .piece {
+    stroke-dasharray: 1;
+    animation:
+      emblem-draw 0.62s calc(var(--i) * 45ms) cubic-bezier(0.3, 0.6, 0.2, 1) both,
+      emblem-fill 0.5s calc(0.28s + var(--i) * 35ms) ease-out both;
+  }
+  .intro .emblem-glint { animation: emblem-glint 0.62s 0.32s cubic-bezier(0.45, 0, 0.2, 1) both; }
+  .intro .emblem-orange { animation: emblem-show 0.32s 0.62s ease-out both; }
+  .intro .emblem-green { animation: emblem-green 0.5s 0.86s ease-out both; }
+  .motion .tag-still { opacity: 0; animation: tag-fallback 0.2s 2.6s forwards; }
+}
+@keyframes emblem-draw {
+  from { stroke-dashoffset: 1; stroke-opacity: 0.85; }
+  to { stroke-dashoffset: 0; stroke-opacity: 0.3; }
+}
+@keyframes emblem-fill { from { fill-opacity: 0; } to { fill-opacity: 1; } }
+@keyframes emblem-show { from { opacity: 0; } to { opacity: 1; } }
+@keyframes emblem-glint {
+  0% { opacity: 0; stroke-dashoffset: 0.12; }
+  18% { opacity: 1; }
+  82% { opacity: 1; }
+  100% { opacity: 0; stroke-dashoffset: -0.34; }
+}
+@keyframes emblem-green {
+  0% { opacity: 0; filter: none; }
+  55% { opacity: 1; filter: drop-shadow(0 0 16px #46d98a); }
+  100% { opacity: 1; filter: drop-shadow(0 0 5px #3fbf7a59); }
+}
+@keyframes tag-fallback { to { opacity: 1; } }
+
+/* ===== Recorrido del producto: frente, reverso y llavero ===== */
+.tour {
+  position: relative;
+  padding: 90px 7%;
+  color: #fff;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 45%, #142b4c, transparent 70%),
+    var(--night);
+}
+.tour .eyebrow { margin-bottom: 14px; }
+.tour h2 { color: #fff; }
+.tour-steps {
+  list-style: none;
+  margin: 44px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 36px;
+}
+.tour-step p { color: #b8c5d6; margin-top: 8px; max-width: 34ch; }
+.tour-num {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--orange);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+}
+.tour-figure {
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  margin: 0 auto 22px;
+}
+.tour-visual { display: none; }
+
+/* Con movimiento: escena fija mientras el scroll cambia la vista */
+.tour.is-motion {
+  height: 330vh;
+  padding: 0;
+  background: var(--night);
+}
+.tour.is-motion .tour-sticky {
+  position: sticky;
+  top: var(--header-h, 88px);
+  height: calc(100vh - var(--header-h, 88px));
+  height: calc(100svh - var(--header-h, 88px));
+  display: grid;
+  grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1.25fr);
+  align-items: center;
+  gap: 4%;
+  padding: 0 max(6%, calc((100% - 1280px) / 2));
+  overflow: hidden;
+  /* la luz ambiente acompaña al producto en la escena fija, no a toda la sección */
+  background: radial-gradient(circle at 66% 50%, #15305a 0, #0e1d36 28%, var(--night) 62%);
+}
+.tour.is-motion .tour-figure { display: none; }
+.tour.is-motion .tour-steps {
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: 30px;
+}
+.tour.is-motion .tour-step {
+  position: relative;
+  padding: 18px 0 18px 22px;
+  opacity: 0.38;
+  transition: opacity 0.35s ease;
+}
+.tour.is-motion .tour-step::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 2px;
+  background: #ffffff1f;
+}
+.tour.is-motion .tour-step::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 2px;
+  background: var(--orange);
+  transform: scaleY(var(--fill, 0));
+  transform-origin: top;
+}
+.tour.is-motion .tour-step.is-active { opacity: 1; }
+.tour.is-motion .tour-visual {
+  display: block;
+  position: relative;
+  height: 100%;
+  min-height: 0;
+}
+.tour-world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 560px;
+  height: 560px;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.tour-canvas {
+  position: absolute;
+  inset: 0;
+  width: 560px;
+  height: 560px;
+}
+.tour-key {
+  position: absolute;
+  /* alineado para que el disco del llavero coincida con el disco del giro */
+  left: 15.06px;
+  top: -681.28px;
+  width: 1313.83px;
+  height: 1212.13px;
+  max-width: none;
+  opacity: 0;
+  -webkit-mask-image: radial-gradient(circle at 19.9% 77.9%, #000 var(--reveal, 0%), transparent calc(var(--reveal, 0%) + 9%));
+  mask-image: radial-gradient(circle at 19.9% 77.9%, #000 var(--reveal, 0%), transparent calc(var(--reveal, 0%) + 9%));
+}
+
+/* Antes de elegir */
+.product-notes h2 { margin-bottom: 30px; }
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 34px;
+  margin-bottom: 22px;
+}
+
+@media (max-width: 700px) {
+  .hero-visual { width: min(78vw, 330px); }
+  .tour { padding: 64px 6%; }
+  .tour-steps { grid-template-columns: 1fr; gap: 46px; }
+  .tour.is-motion { height: 270vh; padding: 0; }
+  .tour.is-motion .tour-sticky {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    align-items: stretch;
+    gap: 0;
+    padding: 18px 6% 26px;
+    background: radial-gradient(circle at 50% 40%, #15305a 0, #0e1d36 34%, var(--night) 72%);
+  }
+  .tour.is-motion .tour-visual { grid-row: 1; }
+  .tour.is-motion .tour-copy { grid-row: 2; }
+  .tour.is-motion .tour-copy > .eyebrow,
+  .tour.is-motion .tour-copy > h2 { display: none; }
+  .tour.is-motion .tour-steps { display: grid; margin-top: 0; }
+  .tour.is-motion .tour-step {
+    grid-area: 1 / 1;
+    padding: 0 0 0 18px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  .tour.is-motion .tour-step::before,
+  .tour.is-motion .tour-step::after { top: 2px; bottom: 2px; }
+  .tour.is-motion .tour-step.is-active { opacity: 1; transform: none; }
+  .notes-grid { grid-template-columns: 1fr; }
 }

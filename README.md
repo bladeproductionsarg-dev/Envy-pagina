@@ -31,19 +31,22 @@ El catálogo anterior identifica el contenido como localizador A Tag y llavero, 
 
 ## Videos de ENVY
 
-La foto principal abre el anuncio cuadrado de 14 segundos. La sección «Cómo funciona» contiene la guía vertical de 53 segundos, con accesos al encendido y a cada sistema. Son copias editadas de los videos facilitados por el propietario. Se conserva la narración de los tramos utilizados. Las cabeceras y el cierre del anuncio son de ENVY. La guía ilustra el procedimiento para cada red compatible.
+La sección «Cómo funciona» contiene la guía vertical de 53 segundos, con accesos al encendido y a cada sistema. Son copias editadas de los videos facilitados por el propietario. Se conserva la narración de los tramos utilizados. Las cabeceras y el cierre del anuncio son de ENVY. La guía ilustra el procedimiento para cada red compatible.
 
 Para probar saltos directos a los capítulos, el servidor debe responder a solicitudes HTTP Range con 206 Partial Content.
 
 Los MP4, los subtítulos WebVTT y la portada del tutorial están en `assets/`. Se reproducen al interactuar y usan controles nativos. Al reemplazar un video hay que revisar también la duración, los subtítulos y los tiempos de los capítulos en `index.html`.
 
-### Clips de la galería «Qué incluye»
+## Portada y recorrido del producto
 
-Dos clips mudos generados con Gemini a partir de las fotos del producto, recortados a 720 × 720:
-- `a-tag-kit-armado.mp4` (4,5 s): el disco entra en el llavero. Se reproduce una vez cuando la galería entra en pantalla y al tocar «Contenido».
-- `a-tag-giro.mp4` (6,2 s): el A Tag gira del frente al reverso. Se reproduce al tocar «Reverso».
+Todo el movimiento se dibuja con imágenes transparentes sobre el azul noche de la página: no hay recuadros, videos incrustados ni controles en la portada.
 
-Cada clip se detiene en su último cuadro. La foto queda debajo con su texto alternativo; el video es decorativo (`aria-hidden`). Con movimiento reducido no se reproducen y solo se ve la foto. «Frente» usa `a-tag-front-dark.png` para continuar el fondo oscuro del giro. Las portadas `.webp` son el primer cuadro de cada clip. Los botones de la galería indican el clip con `data-video` y `data-poster`.
+- **Intro (una vez por sesión, ~1,5 s):** el emblema de ENVY se dibuja en contorno, un reflejo naranja recorre la arista superior, se enciende el detalle verde y el mismo reflejo revela el canto blanco del A Tag. El título, el precio y el botón de compra están visibles desde el primer cuadro. El emblema es un SVG con las 8 piezas del logo vectorizadas desde `Envy-logo.png` (silueta exacta, uniones de 1 px).
+- **Giro:** el A Tag pasa del canto a su frente en tres cuartos y queda quieto. Usa `assets/tag/giro-00.webp` … `giro-52.webp`, 53 cuadros recortados del video de giro generado con Gemini (sin audio ni cabecera). El recorte se hizo con un modelo de segmentación y se neutralizó el tono cálido del video para que el producto se integre con el fondo. `giro-00` es la imagen fija y el respaldo.
+- **Recorrido «Así es por fuera» (`#producto`):** la escena queda fija mientras el scroll cambia la vista: frente con un reflejo, giro hasta el reverso con acercamiento a las flechas, y vuelta al frente para que aparezca el llavero alrededor del mismo disco (`assets/tag/llavero.webp`, recorte de `a-tag-lifestyle.png` alineado con el disco del giro).
+- **Movimiento reducido o sin JavaScript:** no hay intro; la portada muestra el emblema completo y el A Tag quieto, y el recorrido se ve como tres vistas fijas con su texto.
+
+La lógica está al final de `app.js` (`heroTag` y `productTour`). La intro se decide en un script del `<head>` de `index.html` (clases `motion` e `intro` en `<html>`). El anuncio cuadrado de 14 s (`a-tag-anuncio-envy.mp4`) ya no se muestra en la página.
 
 ## Medición futura
 

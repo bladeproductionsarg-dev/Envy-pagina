@@ -96,7 +96,7 @@ Los enlaces a Mercado Libre llevan `data-event="mercadolibre_click"` y un atribu
 ## Publicación
 Sitio publicado: https://envy-smart-living.honeypixie514.chatgpt.site
 
-GitHub Pages (público, sin iniciar sesión): https://bladeproductionsarg-dev.github.io/Envy-pagina/ — se publica solo desde la raíz de la rama `main` cada vez que cambia. Es alojamiento estático: no corre `server.mjs`, así que la compra continúa en Mercado Libre. `.nojekyll` evita que GitHub procese los archivos.
+GitHub Pages (público, sin iniciar sesión): **https://envy.com.ar/** — dominio propio registrado en NIC Argentina el 23/11/2026 (vence el 23/11/2027), DNS en Cloudflare (registros A a las IPs de GitHub y CNAME www, en modo "solo DNS"); el archivo `CNAME` fija el dominio y la dirección anterior bladeproductionsarg-dev.github.io/Envy-pagina redirige sola. se publica solo desde la raíz de la rama `main` cada vez que cambia. Es alojamiento estático: no corre `server.mjs`, así que la compra continúa en Mercado Libre. `.nojekyll` evita que GitHub procese los archivos.
 
 El código actual está en esta carpeta y sincronizado con [GitHub: bladeproductionsarg-dev/Envy-pagina](https://github.com/bladeproductionsarg-dev/Envy-pagina). El repositorio es público, según la configuración que eligió el propietario al crearlo. El proyecto React anterior permanece intacto en Documentos/ChatGPT/Envy/envy-store; no es el proyecto publicado actual.
 

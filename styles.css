@@ -140,8 +140,32 @@ nav {
   font-size: 14px;
   color: #c5cedb;
 }
-nav a:hover {
-  color: var(--orange);
+nav a {
+  position: relative;
+  padding: 6px 0;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--orange);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.3, 0.6, 0.2, 1);
+}
+nav a:hover,
+nav a[aria-current] {
+  color: #fff;
+}
+nav a:hover::after,
+nav a[aria-current]::after {
+  transform: scaleX(1);
 }
 .header-actions {
   display: flex;
@@ -199,7 +223,6 @@ nav a:hover {
 }
 header .brand-glow {
   animation: logo-entry 1.5s ease both;
-  mix-blend-mode: screen;
 }
 header .brand:hover .brand-glow {
   filter: brightness(1.12);
@@ -233,12 +256,12 @@ header .brand:hover .brand-glow {
 .hero .eyebrow {
   margin-bottom: 16px;
 }
-.hero h1 {
+.hero .hero-title {
   font-size: clamp(68px, 7vw, 102px);
   font-weight: 600;
   line-height: 1;
 }
-.hero h1 span {
+.hero .hero-title span {
   display: block;
   max-width: 15ch;
   margin-top: 10px;
@@ -637,8 +660,16 @@ dialog::backdrop {
   gap: 20px;
 }
 .cart-line img {
-  width: 85px;
-  border-radius: 8px;
+  width: 92px;
+  height: 92px;
+  flex: none;
+  object-fit: contain;
+  padding: 6px;
+  border-radius: 14px;
+  background: radial-gradient(circle at 50% 40%, #16264380, #0a142400 75%), #0a1424;
+}
+.dark .cart-line img {
+  background: transparent;
 }
 .quantity {
   display: flex;
@@ -747,6 +778,7 @@ dialog::backdrop {
   }
 }
 @media (max-width: 700px) {
+  html { scroll-padding-top: 136px; }
   header {
     height: auto;
     min-height: 78px;
@@ -764,8 +796,10 @@ dialog::backdrop {
   nav {
     order: 3;
     width: 100%;
-    justify-content: space-between;
-    font-size: 12px;
+    gap: 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    font-size: 13px;
     padding-top: 10px;
     border-top: 1px solid #ffffff15;
   }
@@ -779,10 +813,10 @@ dialog::backdrop {
     gap: 10px;
     padding: clamp(16px, 4vw, 26px) 6% 26px;
   }
-  .hero h1 {
+  .hero .hero-title {
     font-size: clamp(40px, 10vw, 62px);
   }
-  .hero h1 span {
+  .hero .hero-title span {
     font-size: 0.62em;
     max-width: none;
     margin-top: 5px;
@@ -994,16 +1028,15 @@ video:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 
 /* Intro: una vez por sesión (clase .intro en <html>), ~1,5 s, sin tapar título ni compra */
 @media (prefers-reduced-motion: no-preference) {
-  .intro .emblem .piece {
+  .intro .company .emblem .piece {
     stroke-dasharray: 1;
     animation:
       emblem-draw 0.62s calc(var(--i) * 45ms) cubic-bezier(0.3, 0.6, 0.2, 1) both,
       emblem-fill 0.5s calc(0.28s + var(--i) * 35ms) ease-out both;
   }
-  .intro .emblem-glint { animation: emblem-glint 0.62s 0.32s cubic-bezier(0.45, 0, 0.2, 1) both; }
-  .intro .emblem-orange { animation: emblem-show 0.32s 0.62s ease-out both; }
-  .intro .emblem-green { animation: emblem-green 0.5s 0.86s ease-out both; }
-  .intro .tag-still { opacity: 0; animation: tag-fallback 0.2s 2.6s forwards; }
+  .intro .company .emblem-glint { animation: emblem-glint 0.62s 0.32s cubic-bezier(0.45, 0, 0.2, 1) both; }
+  .intro .company .emblem-orange { animation: emblem-show 0.32s 0.62s ease-out both; }
+  .intro .company .emblem-green { animation: emblem-green 0.5s 0.86s ease-out both; }
 }
 @keyframes emblem-draw {
   from { stroke-dashoffset: 1; stroke-opacity: 0.85; }
@@ -1022,7 +1055,6 @@ video:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
   55% { opacity: 1; filter: drop-shadow(0 0 16px #46d98a); }
   100% { opacity: 1; filter: drop-shadow(0 0 5px #3fbf7a59); }
 }
-@keyframes tag-fallback { to { opacity: 1; } }
 
 /* ===== Recorrido del producto: frente, reverso y llavero ===== */
 .tour {
@@ -1293,4 +1325,213 @@ video:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
   .chapters .ch-num, .chapters .ch-text small { display: none; }
   .chapters .ch-text strong { font-size: 15px; }
   .chapters time { font-size: 12px; }
+}
+
+/* ===== Portada de empresa ===== */
+.company {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.8fr);
+  align-items: center;
+  column-gap: clamp(32px, 6vw, 100px);
+  min-height: min(calc(100svh - 88px), 820px);
+  padding: clamp(40px, 5vw, 88px) max(6%, calc((100% - 1280px) / 2));
+  background: radial-gradient(ellipse at 78% 30%, #182e49, transparent 66%), var(--night);
+  color: #fff;
+}
+.company::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 3%, #ff913fb3 32%, #439369 76%, transparent);
+  transform-origin: left;
+}
+.company h1 {
+  max-width: 14ch;
+  font-size: clamp(42px, 5.6vw, 82px);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+}
+.company-lead {
+  max-width: 52ch;
+  margin-top: 26px;
+  color: #c5d1e1;
+  font-size: clamp(16px, 1.35vw, 19px);
+  line-height: 1.55;
+}
+.company-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 30px;
+  margin-top: 34px;
+}
+.company .text-link { color: #fff; }
+.company .text-link:hover { color: var(--orange); }
+.company-visual {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 440px);
+  aspect-ratio: 955 / 1045;
+}
+.company-visual::before {
+  content: "";
+  position: absolute;
+  inset: 4% -8%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #8fb3ec26, transparent);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .company::after { animation: light-line 1.1s .12s ease-out both; }
+  /* después de la intro, el emblema "respira" muy despacio */
+  .motion .company-visual { animation: emblem-float 9s ease-in-out 2s infinite; }
+}
+@keyframes emblem-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ===== Qué hacemos ===== */
+.areas {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(32px, 7vw, 110px);
+  padding-block: clamp(72px, 9vw, 130px);
+}
+.areas-head p:not(.eyebrow) { margin-top: 22px; max-width: 38ch; }
+.areas-head h2 { max-width: 12ch; }
+.area { border-top: 1px solid var(--line); }
+.area:last-child { border-bottom: 1px solid var(--line); }
+.area h3 { font-size: inherit; letter-spacing: 0; }
+.area button {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: 8px 22px;
+  width: 100%;
+  padding: 26px 0;
+  background: none;
+  border: 0;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+.area-num { color: var(--orange); font-size: 13px; font-weight: 600; letter-spacing: 0.12em; }
+.area-name {
+  font-size: clamp(24px, 2.8vw, 38px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  opacity: 0.55;
+  transition: opacity 0.3s;
+}
+.area.is-open .area-name,
+.area button:hover .area-name { opacity: 1; }
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+  opacity: 0.6;
+}
+.status--live { color: #4fb37f; }
+.status--live::before { background: #4fb37f; opacity: 1; box-shadow: 0 0 10px #4fb37f99; }
+.area-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.3, 0.6, 0.2, 1), opacity 0.35s;
+  opacity: 0;
+}
+.area.is-open .area-body { grid-template-rows: 1fr; opacity: 1; }
+.area-body > div { overflow: hidden; padding-left: 44px; }
+.area-body p { max-width: 52ch; padding-bottom: 12px; }
+.area-body .text-link { display: inline-block; margin-bottom: 28px; }
+.area-body:not(:has(.text-link)) > div { padding-bottom: 26px; }
+
+/* ===== Quiénes somos ===== */
+.about {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 7vw, 110px);
+  align-items: start;
+  padding-block: clamp(72px, 9vw, 130px);
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+}
+.about h2 { max-width: 16ch; }
+.about-body p { max-width: 52ch; font-size: clamp(16px, 1.3vw, 18px); line-height: 1.6; }
+.about-body p + p { margin-top: 18px; }
+
+/* Datos que todavía debe confirmar el dueño */
+.todo span,
+.todo dd span {
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--orange);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.about-body .todo { margin-top: 28px; font-size: 14px; }
+
+/* ===== Productos ===== */
+.store-head {
+  padding: clamp(64px, 8vw, 110px) max(7%, calc((100% - 1280px) / 2)) clamp(36px, 5vw, 64px);
+}
+.store-head h2 { max-width: 16ch; }
+.store-head p:not(.eyebrow) { margin-top: 18px; max-width: 52ch; }
+
+/* ===== Contacto ===== */
+.contact {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(32px, 7vw, 110px);
+  padding-block: clamp(72px, 9vw, 120px);
+}
+.contact-list > div {
+  display: grid;
+  grid-template-columns: minmax(130px, 0.5fr) 1fr;
+  gap: 16px;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+}
+.contact-list > div:last-child { border-bottom: 1px solid var(--line); }
+.contact-list dt { color: var(--muted); font-size: 14px; }
+.contact-list dd { color: var(--ink); font-size: 16px; }
+.contact-list a { color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--orange); }
+.contact-list a:hover { color: var(--orange); }
+.contact-list .todo dd { color: var(--muted); }
+
+@media (max-width: 900px) {
+  .company {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    row-gap: 36px;
+    padding: 36px 6% 46px;
+  }
+  .company h1 { max-width: none; font-size: clamp(36px, 10.4vw, 52px); }
+  .company-actions .button { width: 100%; justify-content: center; }
+  .company-visual { order: -1; justify-self: start; width: 112px; }
+  .company { row-gap: 22px; padding-top: 28px; }
+  .areas, .about, .contact { grid-template-columns: 1fr; }
+  .area button { grid-template-columns: auto 1fr; padding: 22px 0; }
+  .area .status { grid-column: 2; }
+  .area-body > div { padding-left: 0; }
+  .contact-list > div { grid-template-columns: 1fr; gap: 4px; }
 }

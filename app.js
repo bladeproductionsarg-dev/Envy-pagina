@@ -46,7 +46,7 @@ function renderCart() {
   document.querySelector("#count").textContent = quantity;
   save(config.cartKey, String(quantity));
   document.querySelector("#cart-body").innerHTML = quantity
-    ? `<div class="cart-line"><img src="assets/a-tag-kit-thumb.webp" width="240" height="240" alt="A Tag con llavero"><div><h3>A Tag</h3><p>${money(priceFor(quantity))} por unidad</p></div></div><div class="quantity"><button id="minus" aria-label="Quitar una unidad">−</button><span>${quantity} ${quantity === 1 ? "unidad" : "unidades"}</span><button id="plus" aria-label="Agregar una unidad" ${quantity >= config.max ? "disabled" : ""}>+</button></div><div class="total"><span>${direct ? "Total del pedido" : "Total de referencia"}</span><strong>${money(quantity * priceFor(quantity))}</strong></div>`
+    ? `<div class="cart-line"><img src="assets/a-tag-carrito.webp" width="300" height="300" alt="A Tag con llavero"><div><h3>A Tag</h3><p>${money(priceFor(quantity))} por unidad</p></div></div><div class="quantity"><button id="minus" aria-label="Quitar una unidad">−</button><span>${quantity} ${quantity === 1 ? "unidad" : "unidades"}</span><button id="plus" aria-label="Agregar una unidad" ${quantity >= config.max ? "disabled" : ""}>+</button></div><div class="total"><span>${direct ? "Total del pedido" : "Total de referencia"}</span><strong>${money(quantity * priceFor(quantity))}</strong></div>`
     : "<p>Tu selección está vacía. Elegí un A Tag para empezar.</p>";
   const checkout = document.querySelector("#checkout");
   checkout.hidden = !quantity;
@@ -260,8 +260,6 @@ function loadFrame(i) {
 const clamp = (v, min = 0, max = 1) => Math.min(max, Math.max(min, v));
 const span = (p, from, to) => clamp((p - from) / (to - from));
 const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-const easeOut = (t) => 1 - Math.pow(1 - t, 3);
-const lerp = (a, b, t) => a + (b - a) * t;
 
 // Dibuja una posición del giro; entre dos cuadros funde ambos para que el movimiento sea continuo.
 function drawFrame(ctx, position) {
@@ -283,30 +281,6 @@ function drawFrame(ctx, position) {
   return Boolean(fa?.ok);
 }
 // Reflejo de luz que recorre solo la superficie del producto.
-function sheen(ctx, at, strength = 0.7) {
-  if (at <= 0 || at >= 1) return;
-  const x = lerp(-160, 720, at);
-  const band = ctx.createLinearGradient(x - 140, x - 260, x + 140, x + 260);
-  band.addColorStop(0, "rgba(255,255,255,0)");
-  band.addColorStop(0.5, `rgba(255,255,255,${strength})`);
-  band.addColorStop(1, "rgba(255,255,255,0)");
-  ctx.globalCompositeOperation = "source-atop";
-  ctx.fillStyle = band;
-  ctx.fillRect(0, 0, 560, 560);
-  ctx.globalCompositeOperation = "source-over";
-}
-// Revela el producto de arriba-izquierda hacia abajo-derecha, como si lo alcanzara el reflejo.
-function reveal(ctx, at) {
-  const x = lerp(-200, 760, at);
-  const mask = ctx.createLinearGradient(x - 240, x - 240, x + 40, x + 40);
-  mask.addColorStop(0, "rgba(0,0,0,1)");
-  mask.addColorStop(1, "rgba(0,0,0,0)");
-  ctx.globalCompositeOperation = "destination-in";
-  ctx.fillStyle = mask;
-  ctx.fillRect(0, 0, 560, 560);
-  ctx.globalCompositeOperation = "source-over";
-}
-
 // --- Portada: el A Tag gira solo, por tiempo y en bucle (frente → perfil → reverso → frente).
 // No depende del scroll ni lo bloquea. Se pausa fuera de pantalla, con la pestaña oculta o con el botón.
 (function heroTag() {
@@ -316,7 +290,6 @@ function reveal(ctx, at) {
   const toggle = document.querySelector(".tag-toggle");
   if (!visual || !world || !canvas?.getContext || !motionAllowed) return;
   const ctx = canvas.getContext("2d");
-  const withIntro = document.documentElement.classList.contains("intro");
 
   // Ritmo del bucle (ms): pausa en el frente, giro, pausa en el reverso, vuelta.
   const HOLD_FRONT = 900, TURN = 2600, HOLD_BACK = 1100;
@@ -331,12 +304,8 @@ function reveal(ctx, at) {
     t -= HOLD_BACK;
     return FRAME_LAST * (1 - easeInOut(t / TURN));
   }
-  // Intro (solo la primera vez en la sesión): el reflejo revela el canto y gira al frente.
-  const REVEAL_AT = 1000, REVEAL_FOR = 460, SETTLE_FOR = 1250;
-  const introEnd = REVEAL_AT + REVEAL_FOR + SETTLE_FOR;
-
   let allLoaded = false;
-  let userPaused = false, onScreen = true;
+  let userPaused = false, onScreen = false;
   let clock = 0, last = null, raf = 0, drawn = -1;
 
   function draw(position, extra) {
@@ -347,24 +316,14 @@ function reveal(ctx, at) {
     if (extra) extra();
   }
   function frameAt(t) {
-    if (withIntro && t < introEnd) {
-      const r = clamp((t - REVEAL_AT) / REVEAL_FOR);
-      const settle = clamp((t - REVEAL_AT - REVEAL_FOR) / SETTLE_FOR);
-      draw(lerp(EDGE_FRAME, 0, easeOut(settle)), r < 1 ? () => {
-        reveal(ctx, easeOut(r));
-        sheen(ctx, r, 0.85);
-      } : null);
-      return;
-    }
-    const loopT = withIntro ? t - introEnd : t;
     // Hasta que llegan todos los cuadros, el A Tag espera quieto en el frente.
-    draw(allLoaded ? loopPosition(loopT) : 0);
+    draw(allLoaded ? loopPosition(t) : 0);
   }
   function tick(now) {
     if (last !== null) {
       const dt = Math.min(64, now - last);
       // sin todos los cuadros, el reloj del bucle no avanza más allá de la pausa en el frente
-      if (allLoaded || clock < (withIntro ? introEnd : 0) + HOLD_FRONT - 1) clock += dt;
+      if (allLoaded || clock < HOLD_FRONT - 1) clock += dt;
     }
     last = now;
     frameAt(clock);
@@ -376,20 +335,35 @@ function reveal(ctx, at) {
     if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
   }
 
-  const first = [];
-  for (let i = 0; i <= EDGE_FRAME; i++) first.push(loadFrame(i));
-  Promise.all(first).then(() => {
-    if (!frames[0].ok) return; // queda la imagen fija
-    world.classList.add("is-live");
-    frameAt(0);
-    toggle.hidden = false;
-    update();
-    const rest = [];
-    for (let i = EDGE_FRAME + 1; i <= FRAME_LAST; i++) rest.push(loadFrame(i));
-    Promise.all(rest).then(() => {
-      allLoaded = frames.every((f) => f?.ok);
+  // Los 53 cuadros se descargan recién cuando la sección del producto está por aparecer.
+  let started = false;
+  function start() {
+    if (started) return;
+    started = true;
+    const first = [];
+    for (let i = 0; i <= EDGE_FRAME; i++) first.push(loadFrame(i));
+    Promise.all(first).then(() => {
+      if (!frames[0].ok) return; // queda la imagen fija
+      world.classList.add("is-live");
+      frameAt(0);
+      toggle.hidden = false;
+      update();
+      const rest = [];
+      for (let i = EDGE_FRAME + 1; i <= FRAME_LAST; i++) rest.push(loadFrame(i));
+      Promise.all(rest).then(() => {
+        allLoaded = frames.every((f) => f?.ok);
+      });
     });
-  });
+  }
+  if ("IntersectionObserver" in window) {
+    const near = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { near.disconnect(); start(); }
+    }, { rootMargin: "900px 0px" });
+    near.observe(visual);
+  } else {
+    onScreen = true;
+    start();
+  }
 
   toggle.addEventListener("click", () => {
     userPaused = !userPaused;
@@ -445,7 +419,7 @@ function reveal(ctx, at) {
 // --- Cierre «Mañana, tu hogar»: el emblema se dibuja al aparecer.
 (function futureEmblem() {
   const future = document.querySelector(".future");
-  const source = document.querySelector(".hero .emblem");
+  const source = document.querySelector(".company .emblem");
   if (!future || !source) return;
   const copy = source.cloneNode(true);
   copy.classList.add("emblem--mark");
@@ -459,4 +433,42 @@ function reveal(ctx, at) {
     future.classList.add("is-drawn");
   }, { threshold: 0.5 });
   io.observe(copy);
+})();
+
+// --- «Qué hacemos»: una área abierta a la vez; sin JavaScript quedan las tres abiertas.
+(function areas() {
+  const items = Array.from(document.querySelectorAll(".area"));
+  if (!items.length) return;
+  function set(item, open) {
+    item.classList.toggle("is-open", open);
+    item.querySelector("button").setAttribute("aria-expanded", String(open));
+  }
+  items.forEach((item, i) => {
+    set(item, i === 0);
+    item.querySelector("button").addEventListener("click", () => {
+      items.forEach((other) => set(other, other === item));
+    });
+  });
+})();
+
+// --- Navegación: marca la sección que se está leyendo.
+(function navMark() {
+  const links = Array.from(document.querySelectorAll('nav[aria-label="Principal"] a'));
+  const targets = links.map((a) => document.querySelector(a.getAttribute("href")));
+  if (!links.length || !("IntersectionObserver" in window)) return;
+  function mark(target) {
+    const nav = links[0].parentElement;
+    links.forEach((a, i) => {
+      if (targets[i] === target) {
+        a.setAttribute("aria-current", "true");
+        // en celular el menú se desliza: que la sección activa quede a la vista
+        if (nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: a.offsetLeft - 24, behavior: "smooth" });
+      } else a.removeAttribute("aria-current");
+    });
+  }
+  const io = new IntersectionObserver((entries) => {
+    const hit = entries.filter((e) => e.isIntersecting).pop();
+    if (hit) mark(hit.target);
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  targets.forEach((t) => t && io.observe(t));
 })();

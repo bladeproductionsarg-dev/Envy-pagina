@@ -1,3 +1,5 @@
 # Guía de edición
 
 HTML, CSS y JavaScript nativos, sin compilación. Mantener español argentino, accesibilidad, responsive, tema claro/oscuro y prefers-reduced-motion. Preservar la silueta de los logos originales en assets. No inventar precios vigentes, descuentos, popularidad, garantías, reseñas, especificaciones ni disponibilidad. No convertir una simulación en una afirmación de rastreo real. Leer README.md antes de ampliar comercio. Verificar carrito vacío, suma/resta y persistencia, cierre con Escape, intro y recorrido del producto (también con movimiento reducido), demo, enlace de compra, información de entrega y navegación móvil. Ejecutar `node --check app.js` después de editar lógica.
+
+Estructura: ENVY es una empresa de seguridad y domótica; A Tag es su primer producto, dentro de `#productos`. No inventar servicios, instalaciones, clientes, historia ni datos de contacto: lo no confirmado queda como «En desarrollo» o «Pendiente» (ver README, «Estructura de la web»). El logo del encabezado usa PNG con transparencia, nunca imágenes opacas con `mix-blend-mode`.

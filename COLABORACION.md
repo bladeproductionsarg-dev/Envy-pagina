@@ -1,7 +1,7 @@
 # Proyecto compartido entre IAs
 
 ## Fuente de verdad
-Esta carpeta, `Envy-web`, contiene la web actual. El dueño usa Escritorio/Envy para los archivos nuevos. La web vende A Tag y anuncia futura domótica. No afirmar que es un Apple AirTag.
+Esta carpeta, `Envy-web`, contiene la web actual. El dueño usa Escritorio/Envy para los archivos nuevos. La web presenta a ENVY como empresa de seguridad y domótica; A Tag es su primer producto y tiene su propia sección (ver README, «Estructura de la web»). No afirmar que es un Apple AirTag.
 
 ## Mapa
 - `index.html`: estructura, textos, fotos, FAQ y enlaces.

@@ -10,7 +10,8 @@ const money = (value) =>
     currency: "ARS",
     maximumFractionDigits: 0,
   }).format(value);
-document.querySelector("#unit-price").textContent = money(config.price) + " ARS";
+const unitPrice = document.querySelector("#unit-price");
+if (unitPrice) unitPrice.textContent = money(config.price) + " ARS";
 const read = (key) => {
   try {
     return localStorage.getItem(key);
@@ -68,7 +69,9 @@ function renderCart() {
   });
 }
 function renderPacks() {
- document.querySelector("#packs").innerHTML = (direct ? [1, 6, 15] : [1, 2, 4])
+ const packs = document.querySelector("#packs");
+ if (!packs) return; // solo la tienda tiene paquetes
+ packs.innerHTML = (direct ? [1, 6, 15] : [1, 2, 4])
   .map((units) => {
     const label = units === 1 ? "1 unidad" : units + " unidades";
     return `<article class="pack">
@@ -118,7 +121,8 @@ theme.addEventListener("click", () => {
 });
 // Tutorial con voz: se reproduce solo cuando la persona lo elige.
 const guide = document.querySelector("#guide-video");
-const guidePlay = document.querySelector(".guide-play");
+if (guide) {
+const guidePlay = document.querySelector(".guide .guide-play");
 // Antes de empezar: portada limpia con un botón integrado. Al reproducir aparecen los
 // controles del navegador (pausa, subtítulos, pantalla completa). Sin JS quedan los controles nativos.
 if (guidePlay) {
@@ -140,8 +144,11 @@ const chapterButtons = Array.from(chapters.querySelectorAll("button"));
 chapters.hidden = false;
 for (const button of chapterButtons) {
   button.addEventListener("click", () => {
-    guide.currentTime = Number(button.dataset.start);
-    guide.play().catch(() => {});
+    // Con preload="none" el video todavía no tiene datos: se espera a conocerlos para poder saltar.
+    const start = Number(button.dataset.start);
+    const seek = () => { guide.currentTime = start; guide.play().catch(() => {}); };
+    if (guide.readyState >= 1) seek();
+    else { guide.addEventListener("loadedmetadata", seek, { once: true }); guide.load(); }
     guide.focus({ preventScroll: true });
     // Que se vean juntos el video y los capítulos (en celular, los capítulos van debajo).
     const header = document.querySelector("header");
@@ -165,6 +172,7 @@ guide.addEventListener("timeupdate", () => {
   }
 });
 
+}
 const states = [
   "Tu A Tag, listo para conectar",
   "A Tag asociado a tu mochila · Demo",
@@ -213,13 +221,14 @@ async function enableDirectStore() {
     // Primero el botón de la portada, sin esperar al catálogo.
     const primary = document.querySelector(".hero-buy .button");
     const checkout = document.querySelector("#checkout");
-    for (const link of [primary,checkout]) {
+    for (const link of [primary, checkout].filter(Boolean)) {
       link.href = "checkout.html";
       link.removeAttribute("target");
       link.removeAttribute("data-event");
       link.textContent = "Comprar en ENVY";
     }
-    document.querySelector(".hero-buy p").textContent = shop.stock
+    const buyNote = document.querySelector(".hero-buy p");
+    if (buyNote) buyNote.textContent = shop.stock
       ? "Retirá en Santos Lugares o recibí tu A Tag sin cargo en CABA."
       : "A Tag agotado para venta directa.";
     const catalog = await import("./catalog.mjs");
@@ -419,12 +428,9 @@ function drawFrame(ctx, position) {
 // --- Cierre «Mañana, tu hogar»: el emblema se dibuja al aparecer.
 (function futureEmblem() {
   const future = document.querySelector(".future");
-  const source = document.querySelector(".company .emblem");
-  if (!future || !source) return;
-  const copy = source.cloneNode(true);
-  copy.classList.add("emblem--mark");
+  const copy = future?.querySelector(".emblem--mark");
+  if (!future || !copy) return;
   copy.querySelector(".emblem-glint")?.remove();
-  future.prepend(copy);
   if (!motionAllowed || !("IntersectionObserver" in window)) return;
   future.classList.add("will-draw");
   const io = new IntersectionObserver((entries) => {
@@ -451,24 +457,38 @@ function drawFrame(ctx, position) {
   });
 })();
 
-// --- Navegación: marca la sección que se está leyendo.
-(function navMark() {
-  const links = Array.from(document.querySelectorAll('nav[aria-label="Principal"] a'));
-  const targets = links.map((a) => document.querySelector(a.getAttribute("href")));
-  if (!links.length || !("IntersectionObserver" in window)) return;
-  function mark(target) {
-    const nav = links[0].parentElement;
-    links.forEach((a, i) => {
-      if (targets[i] === target) {
-        a.setAttribute("aria-current", "true");
-        // en celular el menú se desliza: que la sección activa quede a la vista
-        if (nav.scrollWidth > nav.clientWidth) nav.scrollTo({ left: a.offsetLeft - 24, behavior: "smooth" });
-      } else a.removeAttribute("aria-current");
-    });
+// --- Menú: en celular se abre con un botón; la página actual va marcada en el HTML (aria-current).
+(function menu() {
+  const header = document.querySelector("header");
+  const button = document.querySelector(".menu-toggle");
+  const nav = document.querySelector("#menu");
+  if (!header || !button || !nav) return;
+  header.classList.add("has-menu");
+  button.hidden = false;
+  const label = button.querySelector(".menu-label");
+  function set(open) {
+    header.classList.toggle("menu-open", open);
+    button.setAttribute("aria-expanded", String(open));
+    label.textContent = open ? "Cerrar" : "Menú";
   }
-  const io = new IntersectionObserver((entries) => {
-    const hit = entries.filter((e) => e.isIntersecting).pop();
-    if (hit) mark(hit.target);
-  }, { rootMargin: "-45% 0px -50% 0px" });
-  targets.forEach((t) => t && io.observe(t));
+  button.addEventListener("click", () => set(!header.classList.contains("menu-open")));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && header.classList.contains("menu-open")) { set(false); button.focus(); }
+  });
+  nav.addEventListener("click", (e) => { if (e.target.closest("a")) set(false); });
+  matchMedia("(min-width: 901px)").addEventListener("change", (e) => { if (e.matches) set(false); });
+})();
+
+// --- Anuncio de la tienda: portada limpia con botón; se reproduce con sonido solo si la persona lo elige.
+(function adPlayer() {
+  const video = document.querySelector("#ad-video");
+  const play = document.querySelector(".ad-play");
+  if (!video || !play) return;
+  video.controls = false;
+  play.hidden = false;
+  play.addEventListener("click", () => {
+    video.play().catch(() => { video.controls = true; play.hidden = true; });
+  });
+  video.addEventListener("play", () => { video.controls = true; play.hidden = true; });
+  video.addEventListener("ended", () => { play.hidden = false; });
 })();

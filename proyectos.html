@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#070D18" />
+    <meta
+      name="description"
+      content="Proyectos de seguridad y domótica de ENVY: una línea en desarrollo, sin casos publicados todavía."
+    />
+    <title>Proyectos | ENVY</title>
+    <!-- Vista previa al compartir el link (WhatsApp, redes). La imagen necesita una dirección absoluta. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ENVY" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:title" content="Proyectos | ENVY" />
+    <meta property="og:description" content="Proyectos de seguridad y domótica de ENVY: una línea en desarrollo, sin casos publicados todavía." />
+    <meta property="og:url" content="https://bladeproductionsarg-dev.github.io/Envy-pagina/proyectos.html" />
+    <meta property="og:image" content="https://bladeproductionsarg-dev.github.io/Envy-pagina/assets/og-envy.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A Tag blanco sobre el emblema de ENVY" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://bladeproductionsarg-dev.github.io/Envy-pagina/proyectos.html" />
+    <link rel="icon" href="assets/favicon-64.png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <style>html{background:#070d18}</style>
+    <script>
+      // Tema: azul noche por defecto; solo una elección explícita de modo claro se recuerda.
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem("envy-theme"); } catch (e) {}
+        if (t !== "light") document.documentElement.classList.add("dark");
+        else document.documentElement.style.background = "#f5f7fa";
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Consulta temprana de la venta directa: el botón de compra cambia apenas responde el servidor.
+      window.envyShop = location.protocol.startsWith("http")
+        ? fetch("/api/tienda", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)).catch(() => null)
+        : Promise.resolve(null);
+    </script>
+    <script>
+      // Movimiento solo si la persona no pidió reducirlo. La intro del emblema vive en Inicio.
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("motion");
+    </script>
+    <script src="app.js" defer></script>
+  </head>
+  <body class="page-proyectos">
+    <a class="skip" href="#principal">Ir al contenido</a>
+    <header>
+      <a class="brand" href="index.html" aria-label="ENVY, inicio"
+        ><img class="brand-glow" src="assets/logo-nav.png" srcset="assets/logo-nav.png 1x, assets/logo-nav@2x.png 2x" width="42" height="42" alt="" /><span>ENVY</span></a
+      >
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu" hidden>
+        <span class="menu-bars" aria-hidden="true"><span></span><span></span></span><span class="menu-label">Menú</span>
+      </button>
+      <nav id="menu" aria-label="Principal">
+        <a href="index.html">Inicio</a>
+        <a href="que-hacemos.html">Qué hacemos</a>
+        <a href="quienes-somos.html">Quiénes somos</a>
+        <a href="tienda.html">Tienda</a>
+        <a href="proyectos.html" aria-current="page">Proyectos</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+      <div class="header-actions">
+        <button
+          id="theme"
+          class="icon"
+          aria-label="Modo oscuro"
+          aria-pressed="false"
+        >
+          ◐</button
+        ><button id="cart-open" class="cart-btn">
+          Carrito <span id="count">0</span></button
+        ><a class="button small" href="tienda.html#comprar">Comprar A Tag</a>
+      </div>
+    </header>
+    <main id="principal">
+      <section id="proyectos" class="future page-first" aria-labelledby="proyectos-title">
+        <svg class="emblem emblem--mark" viewBox="0 0 955 1045" aria-hidden="true" focusable="false">
+            <g class="emblem-navy">
+              <path class="piece" style="--i:0" pathLength="1" d="M586,54L562,41L522,16L507,9L493,5L486,5L485,4L463,5L445,10L433,16L411,30L404,33L325,80L316,84L297,96L285,102L280,106L264,114L247,125L236,130L231,134L179,163L179,181L178,182L178,275L177,276L177,286L178,287L185,286L259,243L280,232L287,227L296,223L363,184L441,141L485,115L494,111L508,102L582,61L586,58Z"/>
+              <path class="piece" style="--i:1" pathLength="1" d="M505,147L505,151L510,155L554,181L591,205L606,213L641,236L667,251L673,256L712,279L723,287L740,296L751,304L761,309L784,324L791,327L818,344L830,350L942,419L947,418L947,312L944,296L935,274L923,256L908,241L892,230L878,223L861,212L854,209L809,182L788,171L776,163L765,158L753,150L739,143L720,131L711,127L699,119L671,104L629,79L623,80Z"/>
+              <path class="piece" style="--i:2" pathLength="1" d="M125,194L83,219L69,226L44,242L27,259L22,266L10,290L5,311L5,337L4,338L4,349L5,350L4,354L4,365L5,366L4,369L4,381L5,382L4,385L4,404L5,405L5,413L4,414L4,478L5,479L4,555L95,611L126,631L130,631L131,630L130,195Z"/>
+              <path class="piece" style="--i:3" pathLength="1" d="M480,226L476,226L405,267L389,275L377,283L375,283L345,301L334,306L292,331L248,355L241,360L218,372L217,672L246,690L265,700L275,707L284,711L294,718L300,721L305,721L416,657L416,652L374,626L369,624L358,616L342,607L338,603L338,447L352,438L361,434L368,429L475,368L526,397L531,401L552,412L560,418L581,429L611,448L611,605L478,683L459,693L440,705L433,708L303,783L298,782L271,765L239,747L231,741L224,738L219,734L179,711L174,707L172,707L151,694L92,661L85,656L78,653L8,612L4,613L4,669L5,670L4,673L4,686L5,687L4,721L5,722L5,733L8,747L12,758L18,770L30,787L46,802L76,821L81,823L92,831L117,845L125,851L134,855L158,870L181,882L209,899L218,903L274,936L281,936L308,920L326,911L336,904L349,898L368,886L377,882L426,853L472,828L498,812L505,809L512,804L519,801L547,784L586,763L593,758L616,746L623,741L736,677L736,375L689,348L684,344L675,340L653,326L615,305L603,297L549,267L539,260L513,246L508,242L499,238Z"/>
+              <path class="piece" style="--i:4" pathLength="1" d="M823,390L822,391L822,849L826,850L848,836L857,832L883,816L895,810L913,797L925,784L934,771L943,751L947,734L947,725L948,724L948,677L947,676L947,661L948,660L948,623L947,622L947,467L864,415L850,405L842,401L828,391Z"/>
+              <path class="piece" style="--i:5" pathLength="1" d="M780,729L776,728L681,784L614,822L597,833L590,836L585,840L551,859L539,867L532,870L522,877L477,902L440,925L397,949L377,962L361,970L350,977L350,982L355,984L375,997L382,1000L402,1013L409,1016L429,1029L441,1034L458,1038L484,1038L485,1037L490,1037L505,1032L517,1026L568,996L584,988L591,983L670,939L675,935L693,926L705,918L716,913L721,909L780,876Z"/>
+            </g>
+            <path class="emblem-orange" d="M625,77L593,58L585,57L180,287L178,285L179,166L175,165L163,173L130,191L129,196L129,222L130,223L130,565L131,566L131,630L129,631L8,555L4,556L4,612L11,615L108,672L122,679L167,706L172,707L173,706L172,352L171,351L172,337L188,327L231,304L252,291L284,274L300,264L316,256L624,82Z"/>
+            <path class="emblem-green" d="M781,321L780,322L780,433L779,434L779,444L780,445L779,450L779,460L780,461L780,467L779,468L779,873L783,874L823,851L823,393L826,392L840,402L848,406L862,416L943,467L947,466L947,420L934,411L837,353L832,349L820,343L784,321Z"/>
+            <path class="emblem-glint" pathLength="1" d="M625,77L593,58L585,57L180,287L178,285L179,166L175,165L163,173L130,191L129,196L129,222L130,223L130,565L131,566L131,630L129,631L8,555L4,556L4,612L11,615L108,672L122,679L167,706L172,707L173,706L172,352L171,351L172,337L188,327L231,304L252,291L284,274L300,264L316,256L624,82Z"/>
+          </svg>
+        <p class="eyebrow">PROYECTOS</p>
+        <h1 id="proyectos-title">Hoy, tus objetos.<br />Mañana, tu hogar.</h1>
+        <p>Seguridad y domótica para hogares y negocios es la línea en la que estamos trabajando. Todavía no hay instalaciones ni casos para mostrar: cuando los haya, van a estar acá, con fotos y datos reales.</p>
+        <span>EN DESARROLLO</span>
+      </section>
+      <nav class="related" aria-label="Seguir recorriendo ENVY">
+        <p class="eyebrow">SEGUÍ RECORRIENDO</p>
+        <div class="related-list">
+          <a href="contacto.html"><span class="related-kicker">¿Querés que te avisemos?</span><span class="related-title">Contacto</span><span class="related-arrow" aria-hidden="true">→</span></a>
+          <a href="que-hacemos.html"><span class="related-kicker">Áreas en desarrollo</span><span class="related-title">Qué hacemos</span><span class="related-arrow" aria-hidden="true">→</span></a>
+          <a href="tienda.html"><span class="related-kicker">Disponible hoy</span><span class="related-title">A Tag en la tienda</span><span class="related-arrow" aria-hidden="true">→</span></a>
+        </div>
+      </nav>
+    </main>
+    <footer>
+      <a class="brand" href="index.html"
+        ><img src="assets/logo-96.png" width="96" height="110" alt="" /><span>ENVY</span></a
+      >
+      <p>Tecnología para vivir tranquilo.<br />Santos Lugares, Argentina.</p>
+      <div>
+        <a href="tienda.html#preguntas">Consultas y condiciones de compra</a
+        ><button id="privacy-open">Privacidad de este sitio</button>
+      </div>
+      <nav class="footer-nav" aria-label="Páginas de ENVY">
+          <a href="index.html">Inicio</a>
+          <a href="que-hacemos.html">Qué hacemos</a>
+          <a href="quienes-somos.html">Quiénes somos</a>
+          <a href="tienda.html">Tienda</a>
+          <a href="proyectos.html">Proyectos</a>
+          <a href="contacto.html">Contacto</a>
+      </nav>
+      <small>© <span id="year"></span> ENVY · Seguridad y domótica.</small>
+    </footer>
+    <dialog id="cart" aria-labelledby="cart-heading">
+      <div class="dialog-head">
+        <h2 id="cart-heading">Tu selección</h2>
+        <button id="cart-close" class="icon" aria-label="Cerrar carrito">
+          ×
+        </button>
+      </div>
+      <div id="cart-body"></div>
+      <p class="fine">
+        El carrito guarda tu selección. Si elegís Mercado Libre, volvé a seleccionar allí la cantidad.
+      </p>
+      <a
+        id="checkout" data-event="mercadolibre_click" data-placement="carrito"
+        class="button full"
+        href="https://articulo.mercadolibre.com.ar/MLA-2282184321"
+        target="_blank"
+        rel="noopener"
+        >Comprar en Mercado Libre</a
+      >
+    </dialog>
+    <dialog id="privacy" aria-labelledby="privacy-heading">
+      <div class="dialog-head">
+        <h2 id="privacy-heading">Privacidad</h2>
+        <button id="privacy-close" class="icon" aria-label="Cerrar privacidad">
+          ×
+        </button>
+      </div>
+      <p>
+        El carrito y el tema visual se guardan en este navegador. Al confirmar una compra directa, ENVY registra los datos de contacto y entrega del pedido. Mercado Pago procesa los datos de tarjeta cuando este medio está habilitado.
+        Si seguís el enlace de compra, se aplican las políticas de Mercado
+        Libre.
+      </p>
+    </dialog>
+    <div id="notice" role="status"></div>
+  </body>
+</html>
+
+

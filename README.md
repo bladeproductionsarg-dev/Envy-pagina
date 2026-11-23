@@ -39,30 +39,37 @@ Los MP4, los subtítulos WebVTT y la portada del tutorial están en `assets/`. S
 
 ## Estructura de la web
 
-ENVY se presenta como empresa de seguridad y domótica; A Tag es su primer producto y vive en su propia sección. Orden de `index.html` (cada ancla está en el menú principal):
+ENVY se presenta como empresa de seguridad y domótica, en varias páginas que comparten encabezado, menú, pie, carrito y tema. A Tag es su primer producto y vive en la tienda.
 
-1. **Inicio (`#inicio`, clase `.company`):** «Seguridad inteligente para vivir más tranquilo», emblema de ENVY y dos accesos. Siempre sobre azul noche.
-2. **Qué hacemos (`#que-hacemos`):** tres áreas (Seguridad inteligente, Hogar inteligente, Soluciones para negocios) en un acordeón: se abre una a la vez, con transición suave; sin JavaScript quedan las tres abiertas. Solo A Tag figura como disponible; el resto dice «En desarrollo». No se prometen instalaciones hasta que el dueño confirme qué ofrece.
-3. **Quiénes somos (`#quienes-somos`):** texto propuesto, a validar por el dueño.
-4. **Productos (`#productos`, envuelve todo lo de A Tag):** encabezado «Nuestra primera solución conectada» y, debajo, el A Tag completo: ficha con precio y compra (`#a-tag`, clase `.hero`), recorrido, notas, tutorial (`#funciona`), cantidades y carrito (`#comprar`), confianza (`#seguridad`) y preguntas (`#preguntas`).
-5. **Proyectos (`#proyectos`, clase `.future`):** línea en desarrollo, sin casos inventados.
-6. **Contacto (`#contacto`):** solo datos confirmados (publicación de Mercado Libre y Santos Lugares). Las filas «Pendiente» esperan WhatsApp, email y redes de ENVY.
+| Página | Contenido |
+|---|---|
+| `index.html` (Inicio) | «Seguridad inteligente para vivir más tranquilo», emblema con la intro, directorio de áreas y A Tag destacado. Breve: no obliga a recorrer la tienda. |
+| `que-hacemos.html` | Tres áreas en acordeón: Seguridad inteligente (disponible: A Tag), Hogar inteligente y Soluciones para negocios (en desarrollo). |
+| `quienes-somos.html` | Visión de ENVY; texto propuesto a validar. |
+| `tienda.html` | Tienda completa de A Tag: ficha con giro, precio y compra (`#a-tag`), anuncio de 14 s (`.ad`), recorrido, notas, tutorial (`#funciona`), cantidades y carrito (`#comprar`), confianza (`#seguridad`), preguntas (`#preguntas`). |
+| `proyectos.html` | Línea en desarrollo, sin casos inventados. |
+| `contacto.html` | Solo datos confirmados (Mercado Libre y Santos Lugares) y filas «Pendiente». |
 
-Datos que debe completar el dueño: historia, equipo, años de trayectoria y zonas de trabajo (Quiénes somos); servicios e instalaciones que puede ofrecer hoy (Qué hacemos y Proyectos); WhatsApp, email y redes, y si se reciben consultas de proyectos (Contacto). Están marcados con comentarios `COMPLETAR` en `index.html` y con la etiqueta visible «Pendiente»; retirar esas etiquetas al completarlos.
+- **Encabezado y menú:** iguales en todas las páginas, copiados en cada HTML (sitio estático, sin plantillas). Al cambiar el menú o el pie, cambiarlo en las seis páginas. La página actual lleva `aria-current="page"`. Hasta 900 px el menú se abre con el botón «Menú» (Esc lo cierra). «Comprar A Tag» lleva a `tienda.html#comprar`.
+- **Al final de cada página interna** hay «Seguí recorriendo» con enlaces a páginas relacionadas.
+- **Transición entre páginas:** `@view-transition` (fundido corto) en navegadores que lo soportan; con movimiento reducido no hay transición.
+- **Carrito:** el contador y el diálogo están en todas las páginas (mismo `localStorage`); los paquetes solo en la tienda.
+- `scripts/build.mjs` copia las seis páginas a `dist/`.
 
-El menú marca la sección que se está leyendo (`aria-current`) y en celular se desliza.
+Datos que debe completar el dueño: historia, equipo, años de trayectoria y zonas de trabajo (Quiénes somos); servicios e instalaciones que ofrece hoy (Qué hacemos y Proyectos); WhatsApp, email y redes, y si recibe consultas de proyectos (Contacto). Están marcados con comentarios `COMPLETAR` y la etiqueta visible «Pendiente»; retirarlas al completarlos.
 
 ## Portada y recorrido del producto
 
 Todo el movimiento se dibuja con imágenes transparentes sobre el azul noche de la página: no hay recuadros, videos incrustados ni controles en la portada.
 
 - **Logo del encabezado:** `assets/logo-nav.png` (y `logo-nav@2x.png`) son recortes con transparencia de `logo.png`; la silueta no se modificó. El archivo anterior `logo-glow.webp` (ya no se usa en ninguna página) era opaco y, mezclado con `mix-blend-mode: screen`, dibujaba un cuadrado visible; ya no se usa.
-- **Intro (una vez por sesión, ~1,5 s):** el emblema de ENVY de la portada de empresa se dibuja en contorno, un reflejo naranja recorre la arista superior y se enciende el detalle verde. El título y los accesos están visibles desde el primer cuadro. El emblema es un SVG con las 8 piezas del logo vectorizadas desde `Envy-logo.png` (silueta exacta). Después, el emblema flota muy despacio. Se decide en un script del `<head>` (clases `motion` e `intro` en `<html>`).
-- **Giro en bucle del A Tag (sección A Tag):** el A Tag gira solo y en silencio: frente → perfil → reverso → vuelta, cada ~7 s. Avanza por tiempo, no por scroll, y nunca bloquea el desplazamiento. Los 53 cuadros (`assets/tag/giro-00.webp` … `giro-52.webp`) se descargan recién cuando la sección está por aparecer; se pausa fuera de pantalla, con la pestaña oculta o con el botón discreto de pausa.
+- **Intro (una vez por sesión, ~1,5 s, solo en Inicio):** el emblema de ENVY de la portada de empresa se dibuja en contorno, un reflejo naranja recorre la arista superior y se enciende el detalle verde. El título y los accesos están visibles desde el primer cuadro. El emblema es un SVG con las 8 piezas del logo vectorizadas desde `Envy-logo.png` (silueta exacta). Después, el emblema flota muy despacio. Se decide en un script del `<head>` (clases `motion` e `intro` en `<html>`).
+- **Anuncio (tienda):** `a-tag-anuncio-envy.mp4` (720×720, con voz y subtítulos `a-tag-anuncio.vtt`), portada `a-tag-anuncio-portada.webp` y botón «Ver anuncio»; se reproduce solo si la persona lo elige. En modo oscuro el borde se funde con el fondo.
+- **Giro en bucle del A Tag (tienda):** el A Tag gira solo y en silencio: frente → perfil → reverso → vuelta, cada ~7 s. Avanza por tiempo, no por scroll, y nunca bloquea el desplazamiento. Los 53 cuadros (`assets/tag/giro-00.webp` … `giro-52.webp`) se descargan recién cuando la sección está por aparecer; se pausa fuera de pantalla, con la pestaña oculta o con el botón discreto de pausa.
 - **«Así es por fuera» (`#producto`):** tres vistas fijas (frente, reverso, con llavero) con scroll normal.
 - **Carrito:** la miniatura es `assets/a-tag-carrito.webp` (A Tag con llavero, fondo transparente, cuadrada, `object-fit: contain`). En modo oscuro se mezcla con el diálogo; en claro va sobre un mosaico azul noche.
 - **Movimiento reducido o sin JavaScript:** no hay intro, flotación ni giro; se ve el emblema completo y el A Tag quieto.
-- **Más abajo:** la demo «Así de simple» avanza sola mientras se ve y el cierre de Proyectos dibuja el emblema al aparecer.
+- **Más abajo:** la demo «Así de simple» avanza sola mientras se ve y `proyectos.html` dibuja el emblema al aparecer.
 
 ### Textos según cómo se compra
 
@@ -80,7 +87,7 @@ Toda la web y el checkout arrancan en azul noche (`#070D18`). Un script en el `<
 
 «Cómo configurar tu A Tag»: sin paneles, sobre el fondo de la página. Escritorio: título y capítulos (Encendido, iPhone, Android) a la izquierda, video 9:16 grande a la derecha. Celular: capítulos encima del video; al elegir uno se encuadran capítulos y video completo. Portada `a-tag-guia-conectar.webp` (pantalla «Tocá Conectar») con botón de reproducción integrado; al reproducir aparecen los controles nativos (pausa, subtítulos, pantalla completa). Los subtítulos están activos por defecto.
 
-La lógica está al final de `app.js` (`heroTag`, `autoDemo`, `futureEmblem`, `areas`, `navMark`). El anuncio cuadrado de 14 s (`a-tag-anuncio-envy.mp4`) ya no se muestra en la página.
+La lógica está al final de `app.js` (`heroTag`, `autoDemo`, `futureEmblem`, `areas`, `menu`, `adPlayer`). 
 
 ## Medición futura
 

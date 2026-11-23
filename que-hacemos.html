@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#070D18" />
+    <meta
+      name="description"
+      content="Las áreas de ENVY: seguridad inteligente, hogar inteligente y soluciones para negocios. Hoy, A Tag; el resto en desarrollo."
+    />
+    <title>Qué hacemos | ENVY</title>
+    <!-- Vista previa al compartir el link (WhatsApp, redes). La imagen necesita una dirección absoluta. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ENVY" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:title" content="Qué hacemos | ENVY" />
+    <meta property="og:description" content="Las áreas de ENVY: seguridad inteligente, hogar inteligente y soluciones para negocios. Hoy, A Tag; el resto en desarrollo." />
+    <meta property="og:url" content="https://bladeproductionsarg-dev.github.io/Envy-pagina/que-hacemos.html" />
+    <meta property="og:image" content="https://bladeproductionsarg-dev.github.io/Envy-pagina/assets/og-envy.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A Tag blanco sobre el emblema de ENVY" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://bladeproductionsarg-dev.github.io/Envy-pagina/que-hacemos.html" />
+    <link rel="icon" href="assets/favicon-64.png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <style>html{background:#070d18}</style>
+    <script>
+      // Tema: azul noche por defecto; solo una elección explícita de modo claro se recuerda.
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem("envy-theme"); } catch (e) {}
+        if (t !== "light") document.documentElement.classList.add("dark");
+        else document.documentElement.style.background = "#f5f7fa";
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      // Consulta temprana de la venta directa: el botón de compra cambia apenas responde el servidor.
+      window.envyShop = location.protocol.startsWith("http")
+        ? fetch("/api/tienda", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)).catch(() => null)
+        : Promise.resolve(null);
+    </script>
+    <script>
+      // Movimiento solo si la persona no pidió reducirlo. La intro del emblema vive en Inicio.
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("motion");
+    </script>
+    <script src="app.js" defer></script>
+  </head>
+  <body class="page-que-hacemos">
+    <a class="skip" href="#principal">Ir al contenido</a>
+    <header>
+      <a class="brand" href="index.html" aria-label="ENVY, inicio"
+        ><img class="brand-glow" src="assets/logo-nav.png" srcset="assets/logo-nav.png 1x, assets/logo-nav@2x.png 2x" width="42" height="42" alt="" /><span>ENVY</span></a
+      >
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu" hidden>
+        <span class="menu-bars" aria-hidden="true"><span></span><span></span></span><span class="menu-label">Menú</span>
+      </button>
+      <nav id="menu" aria-label="Principal">
+        <a href="index.html">Inicio</a>
+        <a href="que-hacemos.html" aria-current="page">Qué hacemos</a>
+        <a href="quienes-somos.html">Quiénes somos</a>
+        <a href="tienda.html">Tienda</a>
+        <a href="proyectos.html">Proyectos</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+      <div class="header-actions">
+        <button
+          id="theme"
+          class="icon"
+          aria-label="Modo oscuro"
+          aria-pressed="false"
+        >
+          ◐</button
+        ><button id="cart-open" class="cart-btn">
+          Carrito <span id="count">0</span></button
+        ><a class="button small" href="tienda.html#comprar">Comprar A Tag</a>
+      </div>
+    </header>
+    <main id="principal">
+      <section id="que-hacemos" class="section areas page-first" aria-labelledby="areas-title">
+        <div class="areas-head">
+          <p class="eyebrow">QUÉ HACEMOS</p>
+          <h1 id="areas-title">Tecnología para cuidar lo que importa.</h1>
+          <p>ENVY crece en tres áreas. Hoy hay un producto disponible; el resto es la dirección en la que estamos trabajando.</p>
+        </div>
+        <div class="areas-list">
+          <article class="area is-open">
+            <h3><button type="button" aria-expanded="true" aria-controls="area-1">
+              <span class="area-num">01</span><span class="area-name">Seguridad inteligente</span>
+              <span class="status status--live">Disponible: A Tag</span></button></h3>
+            <div class="area-body" id="area-1"><div>
+              <p>Soluciones para proteger tu casa y tus pertenencias. La primera ya está disponible: A Tag, un localizador de objetos para llaves y mochilas. Las demás soluciones de seguridad están en desarrollo.</p>
+              <a class="text-link" href="tienda.html">Ver A Tag en la tienda <span aria-hidden="true">→</span></a>
+            </div></div>
+          </article>
+          <article class="area is-open">
+            <h3><button type="button" aria-expanded="true" aria-controls="area-2">
+              <span class="area-num">02</span><span class="area-name">Hogar inteligente</span>
+              <span class="status">En desarrollo</span></button></h3>
+            <div class="area-body" id="area-2"><div>
+              <p>Domótica pensada para automatizar y controlar el hogar de forma simple. Todavía no ofrecemos instalaciones; cuando ENVY confirme qué puede brindar, lo vas a encontrar acá.</p>
+            </div></div>
+          </article>
+          <article class="area is-open">
+            <h3><button type="button" aria-expanded="true" aria-controls="area-3">
+              <span class="area-num">03</span><span class="area-name">Soluciones para negocios</span>
+              <span class="status">En desarrollo</span></button></h3>
+            <div class="area-body" id="area-3"><div>
+              <p>Seguridad y automatización para comercios y oficinas. Es una línea en preparación: todavía no hay servicios para contratar.</p>
+            </div></div>
+          </article>
+        </div>
+      </section>
+      <nav class="related" aria-label="Seguir recorriendo ENVY">
+        <p class="eyebrow">SEGUÍ RECORRIENDO</p>
+        <div class="related-list">
+          <a href="tienda.html"><span class="related-kicker">Disponible ahora</span><span class="related-title">A Tag en la tienda</span><span class="related-arrow" aria-hidden="true">→</span></a>
+          <a href="proyectos.html"><span class="related-kicker">Lo que viene</span><span class="related-title">Proyectos</span><span class="related-arrow" aria-hidden="true">→</span></a>
+          <a href="contacto.html"><span class="related-kicker">¿Tenés una consulta?</span><span class="related-title">Contacto</span><span class="related-arrow" aria-hidden="true">→</span></a>
+        </div>
+      </nav>
+    </main>
+    <footer>
+      <a class="brand" href="index.html"
+        ><img src="assets/logo-96.png" width="96" height="110" alt="" /><span>ENVY</span></a
+      >
+      <p>Tecnología para vivir tranquilo.<br />Santos Lugares, Argentina.</p>
+      <div>
+        <a href="tienda.html#preguntas">Consultas y condiciones de compra</a
+        ><button id="privacy-open">Privacidad de este sitio</button>
+      </div>
+      <nav class="footer-nav" aria-label="Páginas de ENVY">
+          <a href="index.html">Inicio</a>
+          <a href="que-hacemos.html">Qué hacemos</a>
+          <a href="quienes-somos.html">Quiénes somos</a>
+          <a href="tienda.html">Tienda</a>
+          <a href="proyectos.html">Proyectos</a>
+          <a href="contacto.html">Contacto</a>
+      </nav>
+      <small>© <span id="year"></span> ENVY · Seguridad y domótica.</small>
+    </footer>
+    <dialog id="cart" aria-labelledby="cart-heading">
+      <div class="dialog-head">
+        <h2 id="cart-heading">Tu selección</h2>
+        <button id="cart-close" class="icon" aria-label="Cerrar carrito">
+          ×
+        </button>
+      </div>
+      <div id="cart-body"></div>
+      <p class="fine">
+        El carrito guarda tu selección. Si elegís Mercado Libre, volvé a seleccionar allí la cantidad.
+      </p>
+      <a
+        id="checkout" data-event="mercadolibre_click" data-placement="carrito"
+        class="button full"
+        href="https://articulo.mercadolibre.com.ar/MLA-2282184321"
+        target="_blank"
+        rel="noopener"
+        >Comprar en Mercado Libre</a
+      >
+    </dialog>
+    <dialog id="privacy" aria-labelledby="privacy-heading">
+      <div class="dialog-head">
+        <h2 id="privacy-heading">Privacidad</h2>
+        <button id="privacy-close" class="icon" aria-label="Cerrar privacidad">
+          ×
+        </button>
+      </div>
+      <p>
+        El carrito y el tema visual se guardan en este navegador. Al confirmar una compra directa, ENVY registra los datos de contacto y entrega del pedido. Mercado Pago procesa los datos de tarjeta cuando este medio está habilitado.
+        Si seguís el enlace de compra, se aplican las políticas de Mercado
+        Libre.
+      </p>
+    </dialog>
+    <div id="notice" role="status"></div>
+  </body>
+</html>
+
+

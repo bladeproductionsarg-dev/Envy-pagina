@@ -129,18 +129,22 @@
       <div class="ribbon"><span class="only-static">Comprá con los medios de pago y envíos de Mercado Libre.</span><span class="only-direct">Retiro en Santos Lugares o envío gratis en CABA.</span></div>
       <section class="section ad" aria-labelledby="ad-title">
         <div class="ad-copy">
-          <p class="eyebrow">EL ANUNCIO</p>
-          <h2 id="ad-title">A Tag en 14 segundos.</h2>
-          <p>Con sonido y subtítulos. Se reproduce solo cuando lo elegís.</p>
+          <p class="eyebrow">LLAVERO INCLUIDO</p>
+          <h2 id="ad-title">A Tag</h2>
+          <p class="ad-sub">Listo para colgar de tus llaves o tu mochila.</p>
+          <div class="ad-price">
+            <p><span class="only-static">Precio de referencia por unidad</span><span class="only-direct">Precio por unidad · de 1 a 5</span></p>
+            <strong class="unit-price">$ 20.000 ARS</strong>
+          </div>
+          <a class="button ad-buy" href="https://articulo.mercadolibre.com.ar/MLA-2282184321"
+            data-event="mercadolibre_click" data-placement="anuncio">Comprar en Mercado Libre<span aria-hidden="true">↗</span></a>
         </div>
-        <div class="ad-player">
-          <video id="ad-video" controls playsinline preload="none" width="720" height="720" poster="assets/a-tag-anuncio-portada.webp">
-            <source src="assets/a-tag-anuncio-envy.mp4" type="video/mp4" />
-            <track kind="captions" srclang="es" label="Español" src="assets/a-tag-anuncio.vtt" default />
-          </video>
-          <button class="guide-play ad-play" type="button" hidden>
-            <span class="guide-play-icon" aria-hidden="true"></span>Ver anuncio · 14 s
-          </button>
+        <!-- Bucle en silencio del A Tag con su llavero (foto real del anuncio, sobre azul noche).
+             Sin controles ni sonido; con movimiento reducido, modo claro o si el video falla queda la imagen fija. -->
+        <div class="ad-visual">
+          <img class="ad-still" src="assets/tag/llavero.webp" width="900" height="830" loading="lazy" alt="A Tag blanco en su llavero de silicona, con argolla y una llave" />
+          <video class="ad-loop" muted loop playsinline preload="none" width="960" height="960" aria-hidden="true" tabindex="-1"
+            poster="assets/a-tag-llavero-portada.webp" data-src="assets/a-tag-llavero-loop.mp4"></video>
         </div>
       </section>
       <section id="producto" class="tour" aria-labelledby="tour-title">

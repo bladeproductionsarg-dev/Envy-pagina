@@ -10,8 +10,7 @@ const money = (value) =>
     currency: "ARS",
     maximumFractionDigits: 0,
   }).format(value);
-const unitPrice = document.querySelector("#unit-price");
-if (unitPrice) unitPrice.textContent = money(config.price) + " ARS";
+document.querySelectorAll("#unit-price, .unit-price").forEach((el) => (el.textContent = money(config.price) + " ARS"));
 const read = (key) => {
   try {
     return localStorage.getItem(key);
@@ -220,8 +219,9 @@ async function enableDirectStore() {
     document.body.classList.add("is-direct");
     // Primero el botón de la portada, sin esperar al catálogo.
     const primary = document.querySelector(".hero-buy .button");
+    const adBuy = document.querySelector(".ad-buy");
     const checkout = document.querySelector("#checkout");
-    for (const link of [primary, checkout].filter(Boolean)) {
+    for (const link of [primary, adBuy, checkout].filter(Boolean)) {
       link.href = "checkout.html";
       link.removeAttribute("target");
       link.removeAttribute("data-event");
@@ -479,16 +479,30 @@ function drawFrame(ctx, position) {
   matchMedia("(min-width: 901px)").addEventListener("change", (e) => { if (e.matches) set(false); });
 })();
 
-// --- Anuncio de la tienda: portada limpia con botón; se reproduce con sonido solo si la persona lo elige.
-(function adPlayer() {
-  const video = document.querySelector("#ad-video");
-  const play = document.querySelector(".ad-play");
-  if (!video || !play) return;
-  video.controls = false;
-  play.hidden = false;
-  play.addEventListener("click", () => {
-    video.play().catch(() => { video.controls = true; play.hidden = true; });
-  });
-  video.addEventListener("play", () => { video.controls = true; play.hidden = true; });
-  video.addEventListener("ended", () => { play.hidden = false; });
+// --- Tienda: A Tag con su llavero en bucle silencioso. Se carga al acercarse, se pausa fuera de
+// pantalla y no se usa con movimiento reducido ni en modo claro (ahí queda la foto fija).
+(function adLoop() {
+  const box = document.querySelector(".ad-visual");
+  const video = box?.querySelector(".ad-loop");
+  if (!video || !motionAllowed || !("IntersectionObserver" in window)) return;
+  let started = false, visible = false;
+  const dark = () => document.documentElement.classList.contains("dark");
+  function update() {
+    const run = visible && dark() && !document.hidden;
+    if (run && !started) {
+      started = true;
+      video.src = video.dataset.src;
+      video.addEventListener("playing", () => box.classList.add("is-playing"), { once: true });
+      video.addEventListener("error", () => box.classList.remove("is-playing"));
+    }
+    if (run) video.play().catch(() => box.classList.remove("is-playing"));
+    else if (started) video.pause();
+    box.classList.toggle("is-paused", !run);
+  }
+  new IntersectionObserver((entries) => {
+    visible = entries.some((e) => e.isIntersecting);
+    update();
+  }, { rootMargin: "200px 0px" }).observe(box);
+  document.addEventListener("visibilitychange", update);
+  new MutationObserver(update).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 })();

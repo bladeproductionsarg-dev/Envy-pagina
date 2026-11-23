@@ -3,7 +3,6 @@ const config = {
   price: 20000,
   max: 40,
   cartKey: "envy-static-cart-v1",
-  themeKey: "envy-static-theme-v1",
 };
 const money = (value) =>
   new Intl.NumberFormat("es-AR", {
@@ -104,18 +103,38 @@ document
   .querySelector("#privacy-close")
   .addEventListener("click", () => document.querySelector("#privacy").close());
 const theme = document.querySelector("#theme");
-function setTheme(dark) {
-  document.body.classList.toggle("dark", dark);
+// El <head> ya aplicó el tema antes de pintar; acá solo se sincroniza el botón y se guarda una elección explícita.
+function showTheme(dark) {
+  document.documentElement.classList.toggle("dark", dark);
   theme.setAttribute("aria-pressed", String(dark));
+  theme.setAttribute("aria-label", dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro");
   theme.title = dark ? "Cambiar a modo claro" : "Cambiar a modo oscuro";
-  save(config.themeKey, dark ? "dark" : "light");
 }
-setTheme(read(config.themeKey) === "dark");
-theme.addEventListener("click", () =>
-  setTheme(!document.body.classList.contains("dark")),
-);
+showTheme(document.documentElement.classList.contains("dark"));
+theme.addEventListener("click", () => {
+  const dark = !document.documentElement.classList.contains("dark");
+  showTheme(dark);
+  save("envy-theme", dark ? "dark" : "light");
+});
 // Tutorial con voz: se reproduce solo cuando la persona lo elige.
 const guide = document.querySelector("#guide-video");
+const guidePlay = document.querySelector(".guide-play");
+// Antes de empezar: portada limpia con un botón integrado. Al reproducir aparecen los
+// controles del navegador (pausa, subtítulos, pantalla completa). Sin JS quedan los controles nativos.
+if (guidePlay) {
+  guide.controls = false;
+  guidePlay.hidden = false;
+  guidePlay.addEventListener("click", () => {
+    guide.play().catch(() => { guide.controls = true; guidePlay.hidden = true; });
+  });
+}
+guide.addEventListener("play", () => {
+  guide.controls = true;
+  if (guidePlay) guidePlay.hidden = true;
+});
+guide.addEventListener("ended", () => {
+  if (guidePlay) guidePlay.hidden = false;
+});
 const chapters = document.querySelector(".chapters");
 const chapterButtons = Array.from(chapters.querySelectorAll("button"));
 chapters.hidden = false;
@@ -124,7 +143,17 @@ for (const button of chapterButtons) {
     guide.currentTime = Number(button.dataset.start);
     guide.play().catch(() => {});
     guide.focus({ preventScroll: true });
-    guide.scrollIntoView({ block: "nearest" });
+    // Que se vean juntos el video y los capítulos (en celular, los capítulos van debajo).
+    const header = document.querySelector("header");
+    document.documentElement.style.setProperty("--header-h", (header ? header.offsetHeight : 88) + "px");
+    const v = guide.getBoundingClientRect();
+    const c = chapters.getBoundingClientRect();
+    const top = header ? header.offsetHeight : 0;
+    const unionTop = Math.min(v.top, c.top);
+    const unionBottom = Math.max(v.bottom, c.bottom);
+    if (unionTop < top || unionBottom > innerHeight) {
+      scrollTo({ top: scrollY + unionTop - top - 8, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    }
   });
 }
 guide.addEventListener("timeupdate", () => {
@@ -278,135 +307,103 @@ function reveal(ctx, at) {
   ctx.globalCompositeOperation = "source-over";
 }
 
-// --- Portada: el reflejo del emblema revela el canto blanco y el A Tag gira hasta su mejor ángulo.
+// --- Portada: el A Tag gira solo, por tiempo y en bucle (frente → perfil → reverso → frente).
+// No depende del scroll ni lo bloquea. Se pausa fuera de pantalla, con la pestaña oculta o con el botón.
 (function heroTag() {
+  const visual = document.querySelector(".hero-visual");
   const world = document.querySelector(".tag-world");
   const canvas = document.querySelector(".tag-canvas");
-  if (!world || !canvas || !motionAllowed || !canvas.getContext) return;
+  const toggle = document.querySelector(".tag-toggle");
+  if (!visual || !world || !canvas?.getContext || !motionAllowed) return;
   const ctx = canvas.getContext("2d");
   const withIntro = document.documentElement.classList.contains("intro");
-  const glint = document.querySelector(".emblem-glint");
-  const cssStart = glint?.getAnimations?.()[0]?.startTime;
-  const start = withIntro && typeof cssStart === "number" ? cssStart : performance.now();
-  const revealAt = withIntro ? 1000 : 0;
-  const revealFor = withIntro ? 460 : 260;
-  const turnFor = 1250;
-  const needed = [];
-  for (let i = 0; i <= EDGE_FRAME; i++) needed.push(loadFrame(i));
-  Promise.all(needed).then(() => {
-    if (!frames[0].ok || !frames[EDGE_FRAME].ok) {
-      world.querySelector(".tag-still").style.opacity = 1;
-      return;
-    }
-    let shift = 0;
-    const late = performance.now() - (start + revealAt);
-    if (late > 0) shift = late; // si los cuadros llegaron tarde, la secuencia arranca cuando están listos
-    world.classList.add("is-live");
-    function tick(now) {
-      const t = now - start - shift;
-      const r = clamp((t - revealAt) / revealFor);
-      const turn = clamp((t - revealAt - revealFor) / turnFor);
-      drawFrame(ctx, lerp(EDGE_FRAME, 0, easeOut(turn)));
-      if (r < 1) {
+
+  // Ritmo del bucle (ms): pausa en el frente, giro, pausa en el reverso, vuelta.
+  const HOLD_FRONT = 900, TURN = 2600, HOLD_BACK = 1100;
+  const CYCLE = HOLD_FRONT + TURN + HOLD_BACK + TURN;
+  function loopPosition(t) {
+    t %= CYCLE;
+    if (t < HOLD_FRONT) return 0;
+    t -= HOLD_FRONT;
+    if (t < TURN) return FRAME_LAST * easeInOut(t / TURN);
+    t -= TURN;
+    if (t < HOLD_BACK) return FRAME_LAST;
+    t -= HOLD_BACK;
+    return FRAME_LAST * (1 - easeInOut(t / TURN));
+  }
+  // Intro (solo la primera vez en la sesión): el reflejo revela el canto y gira al frente.
+  const REVEAL_AT = 1000, REVEAL_FOR = 460, SETTLE_FOR = 1250;
+  const introEnd = REVEAL_AT + REVEAL_FOR + SETTLE_FOR;
+
+  let allLoaded = false;
+  let userPaused = false, onScreen = true;
+  let clock = 0, last = null, raf = 0, drawn = -1;
+
+  function draw(position, extra) {
+    const key = Math.round(position * 20);
+    if (key === drawn && !extra) return;
+    drawn = extra ? -1 : key;
+    drawFrame(ctx, position);
+    if (extra) extra();
+  }
+  function frameAt(t) {
+    if (withIntro && t < introEnd) {
+      const r = clamp((t - REVEAL_AT) / REVEAL_FOR);
+      const settle = clamp((t - REVEAL_AT - REVEAL_FOR) / SETTLE_FOR);
+      draw(lerp(EDGE_FRAME, 0, easeOut(settle)), r < 1 ? () => {
         reveal(ctx, easeOut(r));
         sheen(ctx, r, 0.85);
-      }
-      if (turn < 1) requestAnimationFrame(tick);
+      } : null);
+      return;
     }
-    requestAnimationFrame(tick);
+    const loopT = withIntro ? t - introEnd : t;
+    // Hasta que llegan todos los cuadros, el A Tag espera quieto en el frente.
+    draw(allLoaded ? loopPosition(loopT) : 0);
+  }
+  function tick(now) {
+    if (last !== null) {
+      const dt = Math.min(64, now - last);
+      // sin todos los cuadros, el reloj del bucle no avanza más allá de la pausa en el frente
+      if (allLoaded || clock < (withIntro ? introEnd : 0) + HOLD_FRONT - 1) clock += dt;
+    }
+    last = now;
+    frameAt(clock);
+    raf = requestAnimationFrame(tick);
+  }
+  function update() {
+    const run = !userPaused && onScreen && !document.hidden;
+    if (run && !raf) { last = null; raf = requestAnimationFrame(tick); }
+    if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
+  }
+
+  const first = [];
+  for (let i = 0; i <= EDGE_FRAME; i++) first.push(loadFrame(i));
+  Promise.all(first).then(() => {
+    if (!frames[0].ok) return; // queda la imagen fija
+    world.classList.add("is-live");
+    frameAt(0);
+    toggle.hidden = false;
+    update();
+    const rest = [];
+    for (let i = EDGE_FRAME + 1; i <= FRAME_LAST; i++) rest.push(loadFrame(i));
+    Promise.all(rest).then(() => {
+      allLoaded = frames.every((f) => f?.ok);
+    });
   });
-})();
 
-// --- Recorrido: el producto queda en su lugar y el scroll cambia la vista.
-(function productTour() {
-  const tour = document.querySelector(".tour");
-  if (!tour || !motionAllowed) return;
-  const canvas = tour.querySelector(".tour-canvas");
-  const world = tour.querySelector(".tour-world");
-  const key = tour.querySelector(".tour-key");
-  const visual = tour.querySelector(".tour-visual");
-  const sticky = tour.querySelector(".tour-sticky");
-  const steps = Array.from(tour.querySelectorAll(".tour-step"));
-  if (!canvas?.getContext) return;
-  const ctx = canvas.getContext("2d");
-  const header = document.querySelector("header");
-  let started = false;
-
-  function start() {
-    if (started) return;
-    started = true;
-    const all = [];
-    for (let i = 0; i <= FRAME_LAST; i++) all.push(loadFrame(i));
-    loadFrame(0).then((ok) => {
-      if (!ok) return;
-      tour.classList.add("is-motion");
-      measure();
-      render();
-    });
-    Promise.all(all).then(render);
-  }
-  // Empieza a cargar cuando falta poco para llegar al recorrido.
+  toggle.addEventListener("click", () => {
+    userPaused = !userPaused;
+    toggle.setAttribute("aria-pressed", String(userPaused));
+    toggle.setAttribute("aria-label", userPaused ? "Reanudar el giro del A Tag" : "Pausar el giro del A Tag");
+    update();
+  });
   if ("IntersectionObserver" in window) {
-    const io = new IntersectionObserver((entries) => {
-      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); start(); }
-    }, { rootMargin: "120% 0px" });
-    io.observe(tour);
-  } else start();
-
-  let W = 0, H = 0, headerH = 88;
-  function measure() {
-    headerH = header ? header.offsetHeight : 88;
-    tour.style.setProperty("--header-h", headerH + "px");
-    W = visual.clientWidth;
-    H = visual.clientHeight;
+    new IntersectionObserver((entries) => {
+      onScreen = entries.some((e) => e.isIntersecting);
+      update();
+    }).observe(visual);
   }
-  // Encuadres en coordenadas del cuadro (560 × 560).
-  const views = () => {
-    const disc = Math.min(W, H) / 560;
-    return {
-      disc: { x: 280, y: 284, z: disc * 0.9 },
-      detail: { x: 236, y: 214, z: disc * 1.18 },
-      // disco + llavero completo: x 15–1329, y −681–560
-      kit: { x: 672, y: -61, z: Math.min(W / 1314, H / 1241) * 0.92 },
-    };
-  };
-  const mix = (a, b, t) => ({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), z: lerp(a.z, b.z, t) });
-
-  let pending = false;
-  function render() {
-    pending = false;
-    if (!tour.classList.contains("is-motion")) return;
-    const total = tour.offsetHeight - sticky.offsetHeight;
-    const p = clamp((headerH - tour.getBoundingClientRect().top) / Math.max(1, total));
-    const v = views();
-    // Cuadro del giro: frente → reverso, detalle de las flechas, y vuelta al frente para el llavero.
-    let frame = 0;
-    if (p < 0.5) frame = lerp(0, FRAME_LAST, easeInOut(span(p, 0.2, 0.5)));
-    else if (p < 0.62) frame = FRAME_LAST;
-    else frame = lerp(FRAME_LAST, 0, easeInOut(span(p, 0.62, 0.74)));
-    // Cámara
-    let cam = v.disc;
-    if (p >= 0.5 && p < 0.62) cam = mix(v.disc, v.detail, easeInOut(span(p, 0.5, 0.6)));
-    else if (p >= 0.62 && p < 0.74) cam = mix(v.detail, v.disc, easeInOut(span(p, 0.62, 0.7)));
-    else if (p >= 0.74) cam = mix(v.disc, v.kit, easeInOut(span(p, 0.74, 0.9)));
-    world.style.transform = `translate(${W / 2 - cam.x * cam.z}px, ${H / 2 - cam.y * cam.z}px) scale(${cam.z})`;
-    // Llavero: aparece alrededor del mismo disco y lo reemplaza.
-    const k = span(p, 0.76, 0.9);
-    key.style.opacity = k > 0 ? 1 : 0;
-    key.style.setProperty("--reveal", (k * 140).toFixed(1) + "%");
-    canvas.style.opacity = String(1 - span(p, 0.86, 0.92));
-    if (drawFrame(ctx, frame) && p < 0.2) sheen(ctx, span(p, 0.03, 0.19), 0.55);
-    // Texto del paso activo
-    const active = p < 0.3 ? 0 : p < 0.7 ? 1 : 2;
-    const bounds = [[0, 0.3], [0.3, 0.7], [0.7, 1]];
-    steps.forEach((step, i) => {
-      step.classList.toggle("is-active", i === active);
-      step.style.setProperty("--fill", String(span(p, bounds[i][0], bounds[i][1])));
-    });
-  }
-  const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(render); } };
-  addEventListener("scroll", schedule, { passive: true });
-  addEventListener("resize", () => { measure(); schedule(); });
+  document.addEventListener("visibilitychange", update);
 })();
 
 // --- Demo «Así de simple»: los pasos avanzan solos mientras se ve; si la persona toca uno, se detiene.

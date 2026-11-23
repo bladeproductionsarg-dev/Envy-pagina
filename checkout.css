@@ -263,3 +263,6 @@
     padding: 18px;
   }
 }
+
+.dark .mode-note { background: #2a1c0e; color: #ffd9b8; }
+.dark .choice input { accent-color: var(--orange); }

@@ -25,10 +25,7 @@ const storage = {
     } catch {}
   },
 };
-document.body.classList.toggle(
-  "dark",
-  storage.get("envy-static-theme-v1") === "dark",
-);
+// El tema lo decide el script del <head> (azul noche salvo elección explícita de modo claro).
 let shop,
   order,
   brick,

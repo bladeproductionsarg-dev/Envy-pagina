@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#070D18" />
     <title>Finalizar compra | ENVY</title>
+    <style>html{background:#070d18}</style>
+    <script>
+      // Tema: azul noche por defecto; solo una elección explícita de modo claro se recuerda.
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem("envy-theme"); } catch (e) {}
+        if (t !== "light") document.documentElement.classList.add("dark");
+        else document.documentElement.style.background = "#f5f7fa";
+      })();
+    </script>
     <link rel="icon" href="assets/favicon-64.png" />
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

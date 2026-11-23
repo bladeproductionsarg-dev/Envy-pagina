@@ -42,9 +42,9 @@ Los MP4, los subtítulos WebVTT y la portada del tutorial están en `assets/`. S
 Todo el movimiento se dibuja con imágenes transparentes sobre el azul noche de la página: no hay recuadros, videos incrustados ni controles en la portada.
 
 - **Intro (una vez por sesión, ~1,5 s):** el emblema de ENVY se dibuja en contorno, un reflejo naranja recorre la arista superior, se enciende el detalle verde y el mismo reflejo revela el canto blanco del A Tag. El título, el precio y el botón de compra están visibles desde el primer cuadro. El emblema es un SVG con las 8 piezas del logo vectorizadas desde `Envy-logo.png` (silueta exacta, uniones de 1 px).
-- **Giro:** el A Tag pasa del canto a su frente en tres cuartos y queda quieto. Usa `assets/tag/giro-00.webp` … `giro-52.webp`, 53 cuadros recortados del video de giro generado con Gemini (sin audio ni cabecera). El recorte se hizo con un modelo de segmentación y se neutralizó el tono cálido del video para que el producto se integre con el fondo. `giro-00` es la imagen fija y el respaldo.
-- **Recorrido «Así es por fuera» (`#producto`):** la escena queda fija mientras el scroll cambia la vista: frente con un reflejo, giro hasta el reverso con acercamiento a las flechas, y vuelta al frente para que aparezca el llavero alrededor del mismo disco (`assets/tag/llavero.webp`, recorte de `a-tag-lifestyle.png` alineado con el disco del giro).
-- **Movimiento reducido o sin JavaScript:** no hay intro; la portada muestra el emblema completo y el A Tag quieto, y el recorrido se ve como tres vistas fijas con su texto.
+- **Giro en bucle:** después de la intro (o desde el inicio en visitas siguientes), el A Tag gira solo y en silencio: frente → perfil → reverso → vuelta al frente, cada ~7 s. Avanza por tiempo, no por scroll, y nunca bloquea el desplazamiento. Se pausa fuera de pantalla, con la pestaña oculta o con el botón discreto de pausa. Usa `assets/tag/giro-00.webp` … `giro-52.webp`, 53 cuadros recortados del video de giro generado con Gemini; `giro-00` es la imagen fija y el respaldo.
+- **«Así es por fuera» (`#producto`):** tres vistas fijas (frente, reverso, con llavero) que se recorren con un scroll normal, sin secciones fijadas.
+- **Movimiento reducido o sin JavaScript:** no hay intro ni giro; la portada muestra el emblema completo y el A Tag quieto.
 
 - **Más abajo:** la demo «Así de simple» avanza sola mientras se ve (se detiene si la persona toca un paso) y el cierre «Mañana, tu hogar» dibuja el emblema al aparecer.
 
@@ -56,7 +56,15 @@ En alojamiento estático (GitHub Pages, Sites) la compra continúa en Mercado Li
 
 Las miniaturas usan versiones chicas (`favicon-64.png`, `apple-touch-icon.png`, `logo-96.png`, `a-tag-kit-thumb.webp`, `a-tag-front-thumb.webp`); los PNG originales quedan en `assets/` sin cargarse. `assets/og-envy.jpg` (1200 × 630) es la imagen que muestran WhatsApp y las redes al compartir el link (metas `og:` en `index.html`, con la dirección de GitHub Pages).
 
-La lógica está al final de `app.js` (`heroTag`, `productTour`, `autoDemo`, `futureEmblem`). La intro se decide en un script del `<head>` de `index.html` (clases `motion` e `intro` en `<html>`). El anuncio cuadrado de 14 s (`a-tag-anuncio-envy.mp4`) ya no se muestra en la página.
+### Tema
+
+Toda la web y el checkout arrancan en azul noche (`#070D18`). Un script en el `<head>` aplica la clase `dark` en `<html>` antes de pintar, así no hay destello blanco. Solo se recuerda una elección explícita del selector (`localStorage` `envy-theme` = `light`/`dark`).
+
+### Tutorial
+
+«Cómo configurar tu A Tag»: sin paneles, sobre el fondo de la página. Escritorio: título y capítulos (Encendido, iPhone, Android) a la izquierda, video 9:16 grande a la derecha. Celular: capítulos encima del video; al elegir uno se encuadran capítulos y video completo. Portada `a-tag-guia-conectar.webp` (pantalla «Tocá Conectar») con botón de reproducción integrado; al reproducir aparecen los controles nativos (pausa, subtítulos, pantalla completa). Los subtítulos están activos por defecto.
+
+La lógica está al final de `app.js` (`heroTag`, `autoDemo`, `futureEmblem`). La intro se decide en un script del `<head>` de `index.html` (clases `motion` e `intro` en `<html>`). El anuncio cuadrado de 14 s (`a-tag-anuncio-envy.mp4`) ya no se muestra en la página.
 
 ## Medición futura
 

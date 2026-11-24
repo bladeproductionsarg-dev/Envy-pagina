@@ -45,20 +45,63 @@
         : Promise.resolve(null);
     </script>
     <script>
-      // La intro del emblema se muestra una vez por sesión y nunca con movimiento reducido.
+      // Pantalla de carga con el video de ENVY: una vez por sesión, solo al entrar al Inicio
+      // y nunca con movimiento reducido (ahí el emblema queda quieto).
       (function () {
         var seen = false;
         try { seen = sessionStorage.getItem("envy-intro") === "1"; } catch (e) {}
         if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
         document.documentElement.classList.add("motion");
         if (seen) return;
-        document.documentElement.classList.add("intro");
+        document.documentElement.classList.add("video-intro");
         try { sessionStorage.setItem("envy-intro", "1"); } catch (e) {}
       })();
     </script>
     <script src="app.js" defer></script>
   </head>
   <body class="page-inicio">
+    <dialog class="site-intro" id="site-intro" aria-label="Intro de ENVY">
+      <video class="site-intro-video" src="assets/envy-intro.mp4" muted playsinline preload="auto"
+        poster="assets/envy-intro-portada.webp" aria-hidden="true"></video>
+      <form class="intro-skip" method="dialog">
+        <button type="submit" autofocus>Omitir intro <span aria-hidden="true">→</span></button>
+      </form>
+    </dialog>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var intro = document.getElementById("site-intro");
+        var video = intro.querySelector("video");
+        if (!root.classList.contains("video-intro") || typeof intro.showModal !== "function" ||
+            (location.hash && location.hash !== "#inicio")) {
+          root.classList.remove("video-intro");
+          intro.remove();
+          return;
+        }
+        var done = false;
+        function finish() {
+          if (done) return;
+          done = true;
+          intro.classList.add("is-leaving");
+          setTimeout(function () { if (intro.open) intro.close(); }, 650);
+        }
+        intro.addEventListener("close", function () {
+          done = true;
+          video.pause();
+          root.classList.remove("video-intro");
+          intro.remove();
+        }, { once: true });
+        intro.showModal();
+        // Si con conexión lenta no arranca en 3,5 s, la página se muestra igual.
+        var slow = setTimeout(finish, 3500);
+        video.addEventListener("playing", function () { clearTimeout(slow); }, { once: true });
+        video.addEventListener("ended", finish);
+        video.addEventListener("error", finish);
+        setTimeout(finish, 12000);
+        var p = video.play();
+        if (p && p.catch) p.catch(finish);
+      })();
+    </script>
     <a class="skip" href="#principal">Ir al contenido</a>
     <header>
       <a class="brand" href="index.html" aria-label="ENVY, inicio"

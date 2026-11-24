@@ -61,8 +61,7 @@
   </head>
   <body class="page-inicio">
     <dialog class="site-intro" id="site-intro" aria-label="Intro de ENVY">
-      <video class="site-intro-video" src="assets/envy-intro.mp4" muted playsinline preload="auto"
-        poster="assets/envy-intro-portada.webp" aria-hidden="true"></video>
+      <video class="site-intro-video" muted playsinline preload="auto" aria-hidden="true"></video>
       <form class="intro-skip" method="dialog">
         <button type="submit" autofocus>Omitir intro <span aria-hidden="true">→</span></button>
       </form>
@@ -78,6 +77,10 @@
           intro.remove();
           return;
         }
+        // Pantalla vertical (celular): versión 9:16. Horizontal: versión 1920×1080.
+        var vertical = matchMedia("(max-aspect-ratio: 1/1)").matches;
+        video.poster = vertical ? "assets/envy-intro-portada-9x16.webp" : "assets/envy-intro-portada.webp";
+        video.src = vertical ? "assets/envy-intro-9x16.mp4" : "assets/envy-intro.mp4";
         var done = false;
         function finish() {
           if (done) return;

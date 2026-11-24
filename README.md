@@ -48,15 +48,16 @@ ENVY se presenta como empresa de seguridad y domótica, en varias páginas que c
 | `quienes-somos.html` | Visión de ENVY; texto propuesto a validar. |
 | `tienda.html` | Tienda completa de A Tag: ficha con giro, precio y compra (`#a-tag`), anuncio de 14 s (`.ad`), recorrido, notas, tutorial (`#funciona`), cantidades y carrito (`#comprar`), confianza (`#seguridad`), preguntas (`#preguntas`). |
 | `proyectos.html` | Línea en desarrollo, sin casos inventados. |
-| `contacto.html` | Solo datos confirmados (Mercado Libre y Santos Lugares) y filas «Pendiente». |
+| `contacto.html` | Datos confirmados por el dueño (23/11/2026): WhatsApp +54 9 11 6273-2505, email bladeproductions.arg@gmail.com, Instagram @f_blade_m, tienda/Mercado Libre y Santos Lugares. |
 
 - **Encabezado y menú:** iguales en todas las páginas, copiados en cada HTML (sitio estático, sin plantillas). Al cambiar el menú o el pie, cambiarlo en las seis páginas. La página actual lleva `aria-current="page"`. Hasta 900 px el menú se abre con el botón «Menú» (Esc lo cierra). «Comprar A Tag» lleva a `tienda.html#comprar`.
+- **WhatsApp:** botón flotante `.wa-float` en las seis páginas (en celular solo el ícono), con mensaje ya escrito; en la tienda menciona A Tag. Se oculta con el carrito o el menú abiertos. Número: 5491162732505 (`wa.me`).
 - **Al final de cada página interna** hay «Seguí recorriendo» con enlaces a páginas relacionadas.
 - **Transición entre páginas:** `@view-transition` (fundido corto) en navegadores que lo soportan; con movimiento reducido no hay transición.
 - **Carrito:** el contador y el diálogo están en todas las páginas (mismo `localStorage`); los paquetes solo en la tienda.
 - `scripts/build.mjs` copia las seis páginas a `dist/`.
 
-Datos que debe completar el dueño: historia, equipo, años de trayectoria y zonas de trabajo (Quiénes somos); servicios e instalaciones que ofrece hoy (Qué hacemos y Proyectos); WhatsApp, email y redes, y si recibe consultas de proyectos (Contacto). Están marcados con comentarios `COMPLETAR` y la etiqueta visible «Pendiente»; retirarlas al completarlos.
+Datos que debe completar el dueño: historia, equipo, años de trayectoria y zonas de trabajo (Quiénes somos); servicios e instalaciones que ofrece hoy (Qué hacemos y Proyectos); si recibe consultas de proyectos (Contacto). Están marcados con comentarios `COMPLETAR` y la etiqueta visible «Pendiente»; retirarlas al completarlos.
 
 ## Portada y recorrido del producto
 

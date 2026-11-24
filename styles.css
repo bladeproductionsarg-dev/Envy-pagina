@@ -1814,3 +1814,42 @@ footer .footer-nav a { font-size: 13px; }
 .store-head.page-first { padding-top: clamp(40px, 5vw, 72px); padding-bottom: clamp(20px, 3vw, 36px); }
 .store-head h1 { font-size: clamp(32px, 3.8vw, 52px); }
 @media (max-width: 900px) { .ad { gap: 18px; } }
+
+/* ----- WhatsApp: botón flotante en todas las páginas ----- */
+.wa-float {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 18px 12px 14px;
+  border-radius: 999px;
+  background: #287b4b;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px #0006, 0 0 0 1px #ffffff1a inset;
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.2s;
+}
+.wa-float svg { width: 22px; height: 22px; }
+.wa-float:hover { background: #2f8f58; transform: translateY(-2px); }
+.wa-float:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  .motion .wa-float { animation: wa-in 0.5s 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+}
+@keyframes wa-in { from { opacity: 0; transform: translateY(16px); } }
+@media (max-width: 700px) {
+  .wa-float { padding: 14px; }
+  .wa-float span { display: none; }
+  .wa-float svg { width: 26px; height: 26px; }
+}
+/* que no tape el diálogo del carrito ni el menú abierto */
+body:has(dialog[open]) .wa-float,
+body:has(header.menu-open) .wa-float { display: none; }
+
+/* ----- Contacto ----- */
+.contact-lead { margin-top: 18px; max-width: 32ch; color: var(--muted); font-size: 17px; }
+.whatsapp-cta { margin-top: 26px; background: #287b4b; color: #fff; }
+.whatsapp-cta:hover { background: #2f8f58; }
